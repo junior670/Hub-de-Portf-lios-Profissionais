@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub de Portfólios Profissionais</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, #0ff, #00f, #f0f);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 2px solid #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      text-shadow: 0 0 10px #0ff;
+    }
+    nav {
+      text-align: center;
+      padding: 10px;
+      background-color: #111;
+      box-shadow: inset 0 -1px 2px #0ff;
+    }
+    nav a {
+      color: #0ff;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .search-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .search-bar input {
+      padding: 10px;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+      border: 2px solid #0ff;
+      background-color: #000;
+      color: #0ff;
+      font-size: 1em;
+    }
+    .category {
+      margin-bottom: 40px;
+    }
+    .category h2 {
+      border-left: 5px solid #0ff;
+      padding-left: 10px;
+      font-size: 1.5em;
+    }
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: #111;
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 15px #0ff;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card a {
+      color: #0ff;
+      text-decoration: none;
+    }
+    .sponsors {
+      margin-top: 50px;
+      padding: 30px;
+      background-color: #111;
+      border-top: 2px solid #0ff;
+      box-shadow: 0 0 10px #0ff inset;
+    }
+    .sponsors h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sponsors p {
+      text-align: center;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      color: #0ff;
+    }
+    .sponsor-banners {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .sponsor-banners img {
+      max-width: 200px;
+      border: 2px solid #0ff;
+      border-radius: 8px;
+    }
+    .business-showcase {
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #111;
+      border-top: 2px solid #0ff;
+      box-shadow: 0 0 15px #0ff inset;
+    }
+    .business-showcase h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 0 20px;
+    }
+    .showcase-card {
+      border: 2px solid #0ff;
+      padding: 15px;
+      background-color: #000;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0ff;
+      text-align: center;
+    }
+    .showcase-card a {
+      color: #0ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #000;
+      color: #666;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hub de Portfólios Profissionais</h1>
+  </header>
+
+  <nav>
+    <a href="#portfolios">Portfólios</a>
+    <a href="#negocios">Vitrine</a>
+    <a href="#patrocinadores">Apoiadores</a>
+  </nav>
+
+  <div class="container" id="portfolios">
+    <div class="search-bar">
+      <input type="text" id="searchInput" onkeyup="searchPortfolios()" placeholder="Buscar por nome ou site...">
+    </div>
+    <div class="category">
+      <h2>Empreendedores Digitais</h2>
+      <div class="portfolio" id="portfolioList">
+        <div class="card">
+          <h3>Junior Santos</h3>
+          <p><a href="https://junior670.github.io/Portf-lio/" target="_blank">Profissional formado em Gestão da Tecnologia da Informação pela Fatec Jundiaí, pós-graduando em Matemática Financeira, Estatística e Segurança da Informação. Apaixonado por tecnologia, gestão e inovação.</a></p> | Apaixonado por tecnologia🔥 | gestão🔥 | inovação🔥.
+        </div>
+        <div class="card">
+          <h3>Mariana Dias</h3>
+          <p><a href="https://github.com/LabDevOps09/mariana-dias-portfolio" target="_blank">Profissional com sólida formação em análise de dados e segurança da informação, com experiência em soluções para infraestrutura de TI, automação de processos e análise de grandes volumes de dados. Especialista em Power BI, SQL, cibersegurança e administração Linux, com foco na otimização de ambientes em nuvem.</a></p>Tecnologias Descentralizadas🔥 | Blockchain/Web3🔥 |(DAOs - NFTs - contratos inteligentes)🔥|.
+        </div>
+
+        <div class="card">
+          <h3>Fabricio Vieira</h3>
+          <p><a href="https://github.com/fanzz293" target="_blank">Sou formado como técnico de informática. Atualmente estou no 7º período de sistemas de informação | Mais de 10 anos de experiência com infraestrutura de PC's🔥|.</a></p>fffffff🔥 | fffff🔥 |ffffffff🔥|.
+        </div>
+        
+        <div class="card">
+          <h3>Wesley schuab Vieira</h3>
+          <p><a href="https://github.com/WesleySchuab" target="_blank">Técnologo em Análise e Desenvolvimento de Sistemas pelo Instituto Federal de Educação, Ciência e Tecnologia de São Paulo
+            Criador de um aplicativo Android de sucesso.Tenho adquirido experiência desenvolvendo diversos projetos pessoais e profissionais que evidenciam minhas habilidades em programação, design de interfaces e resolução de problemas.</a></p> Desenvolvedor Android🔥 | Kotlin🔥 | MVVM🔥 | Jetpack Compose🔥 | REST API🔥 | Retrofit🔥 | Firebase🔥 | Clean Architeture🔥 | Rom🔥 | Coroutines🔥 | Hilt🔥 | Navigation🔥 | Testing🔥 | GitHub🔥.
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>  
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+        <div class="card">
+          <h3>Maria Tech</h3>
+          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <section class="business-showcase" id="negocios">
+    <h2>Vitrine de Negócios Locais</h2>
+    <div class="showcase-grid">
+      <div class="showcase-card">
+        <h3>Loja de Roupas XYZ</h3>
+        <a href="https://lojaderoupasxyz.com.br" target="_blank">www.lojaderoupasxyz.com.br</a>
+      </div>
+      <div class="showcase-card">
+        <h3>AutoCar Veículos</h3>
+        <a href="https://autocarveiculos.com" target="_blank">autocarveiculos.com</a>
+      </div>
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+      <div class="showcase-card">
+        <h3>Acessórios Fashion</h3>
+        <a href="https://acessoriosfashion.com.br" target="_blank">acessoriosfashion.com.br</a>
+      </div>
+
+
+    </div>
+  </section>
+
+  <section class="sponsors" id="patrocinadores">
+
+    <h2>Apoiadores da Página</h2>
+    <p>Com apenas <strong>R$10/mês</strong> você ganha seu espaço aqui na nossa galeria de apoiadores e fortalece um projeto independente.
+      Uma forma simbólica de dizer: você faz parte disso. ❤️. ✨</p>
+    <div class="sponsor-banners">
+      <img src="icon-102.jpeg" alt="Apoiador 1">
+      <img src="icon-192.png" alt="Apoiador 2">
+      
+    </div>
+  </section>
+
+  <!-- Rodapé Final -->
+<footer style="background-color: #000; color: #ccc; text-align: center; padding: 30px 15px; font-size: 0.95em; line-height: 1.6;">
+  <p>&copy; 2025 <strong>Hub de Portfólios Profissionais</strong>. Todos os direitos reservados.</p>
+  <p style="margin-top: 10px;">
+    As imagens, textos e demais conteúdos dos portfólios são de responsabilidade exclusiva de seus respectivos autores.
+    Este site serve apenas como vitrine digital para exposição dos materiais enviados.
+  </p>
+  <p style="margin-top: 10px;">
+    Não nos responsabilizamos por direitos autorais ou uso indevido de qualquer mídia inserida pelos usuários.
+  </p>
+  <p style="margin-top: 15px; font-size: 0.85em; color: #666;">
+    Desenvolvido com 💡 criatividade, 💻 tecnologia e ☕ café.
+  </p>
+</footer>
+
+  
+
+  <script>
+    function searchPortfolios() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const cards = document.querySelectorAll('.portfolio .card');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(filter) ? '' : 'none';
+      });
+    }
+  </script>
+    <!-- Outras seções da sua página -->
+
+  <!-- Seção de Redes Sociais -->
+  <section style="background-color:#111; color:#0ff; padding: 30px 20px; text-align: center; border-top: 2px solid #0ff; box-shadow: 0 0 10px #0ff inset;">
+    <h2>Minhas Redes Sociais</h2>
+    <p>Fique à vontade para me seguir:</p>
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; font-size: 1.2em;">
+      <a href="https://www.linkedin.com/in/junior-santos-9b930b211" target="_blank" style="color: #0ff; text-decoration: none;">LinkedIn</a> |
+      <a href="https://github.com/junior670" target="_blank" style="color: #0ff; text-decoration: none;">GitHub</a> |
+      <a href="https://www.instagram.com/junior670" target="_blank" style="color: #0ff; text-decoration: none;">Instagram</a> |
+      <a href="https://www.dio.me/users/diegojr09" target="_blank" style="color: #0ff; text-decoration: none;">Perfil Público.Dio</a> |
+      <a href="https://www.dio.me/" target="_blank" style="color: #0ff; text-decoration: none;">Dio.me</a> |
+      <a href="https://www.youtube.com/watch?v=jVxxKYlSDNk" target="_blank" style="color: #0ff; text-decoration: none;">YouTube</a> |
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>&copy; 2025 Junior Diego Silva dos Santos. Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>
+
+</body>
+</html>
