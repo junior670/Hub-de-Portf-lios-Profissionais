@@ -61,9 +61,13 @@ async function compartilharStatus(nome, views, rank) {
         : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} visualizações.`;
     
     const url = window.location.href;
+    const textoCompleto = `${msg} Acesse aqui: ${url}`;
 
-    // 1. Tenta o compartilhamento nativo do sistema
-    if (navigator.share) {
+    // 1. Tenta o compartilhamento nativo (Para navegadores normais como Chrome/Safari)
+    // Adicionamos uma verificação extra para evitar o travamento em WebViews de apps
+    const isWebView = navigator.userAgent.includes('wv') || navigator.userAgent.includes('Android');
+
+    if (navigator.share && !isWebView) {
         try {
             await navigator.share({
                 title: 'Galeria Tech',
@@ -72,17 +76,25 @@ async function compartilharStatus(nome, views, rank) {
             });
             return; 
         } catch (error) {
-            console.log("Sistema bloqueou share ou usuário cancelou. Indo para Plano B.");
+            console.log("Falha no share nativo, tentando atalho...");
         }
     }
 
-    // 2. Plano B: Tenta copiar para o teclado e avisa o usuário
-    try {
-        await navigator.clipboard.writeText(`${msg} ${url}`);
-        alert("Link e status copiados para o seu teclado! 🚀\nAgora é só colar no WhatsApp ou LinkedIn.");
-    } catch (err) {
-        console.error("Falha ao copiar:", err);
-        alert("Ops! Por favor, copie o link da barra de endereços do seu navegador.");
+    // 2. PLANO C (O PULO DO GATO): Link direto para WhatsApp
+    // Isso funciona em 100% dos casos no Android, mesmo dentro de apps travados
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoCompleto)}`;
+    
+    // Tenta abrir o WhatsApp
+    const win = window.open(whatsappUrl, '_blank');
+
+    // 3. Se o "window.open" falhar (bloqueio de popup), vai para o Clipboard
+    if (!win) {
+        try {
+            await navigator.clipboard.writeText(textoCompleto);
+            alert("O App bloqueou o envio direto, mas o status foi COPIADO! 🚀\nAgora é só colar no seu WhatsApp ou LinkedIn.");
+        } catch (err) {
+            alert("Copie o link: " + url);
+        }
     }
 }
 
@@ -246,3 +258,4 @@ window.onload = () => {
         };
     }
 };
+
