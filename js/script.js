@@ -61,43 +61,23 @@ async function compartilharStatus(nome, views, rank) {
         : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} visualizações.`;
     
     const url = window.location.href;
-    const textoCompleto = `${msg} Acesse aqui: ${url}`;
+    const textoCompleto = `${msg}\n\nAcesse aqui: ${url}`;
 
-    // 1. Tenta o compartilhamento nativo (Para navegadores normais como Chrome/Safari)
-    // Adicionamos uma verificação extra para evitar o travamento em WebViews de apps
-    const isWebView = navigator.userAgent.includes('wv') || navigator.userAgent.includes('Android');
-
-    if (navigator.share && !isWebView) {
-        try {
-            await navigator.share({
-                title: 'Galeria Tech',
-                text: msg,
-                url: url
-            });
-            return; 
-        } catch (error) {
-            console.log("Falha no share nativo, tentando atalho...");
-        }
-    }
-
-    // 2. PLANO C (O PULO DO GATO): Link direto para WhatsApp
-    // Isso funciona em 100% dos casos no Android, mesmo dentro de apps travados
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoCompleto)}`;
-    
-    // Tenta abrir o WhatsApp
-    const win = window.open(whatsappUrl, '_blank');
-
-    // 3. Se o "window.open" falhar (bloqueio de popup), vai para o Clipboard
-    if (!win) {
-        try {
+    // 1. Tenta copiar direto para o teclado (Clipboard)
+    // É a forma mais segura que não trava e não sai do App
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
             await navigator.clipboard.writeText(textoCompleto);
-            alert("O App bloqueou o envio direto, mas o status foi COPIADO! 🚀\nAgora é só colar no seu WhatsApp ou LinkedIn.");
-        } catch (err) {
-            alert("Copie o link: " + url);
+            alert("✅ STATUS COPIADO!\n\nO link e o ranking já estão no seu teclado. Agora é só abrir o WhatsApp ou LinkedIn e 'Colar' na sua mensagem! 🚀");
+        } else {
+            // Plano de fundo se o clipboard falhar
+            throw new Error('Clipboard não disponível');
         }
+    } catch (err) {
+        // Se tudo falhar, ele mostra o texto numa caixinha para o usuário copiar manualmente
+        window.prompt("O App bloqueou o compartilhamento automático. Copie o texto abaixo para postar:", textoCompleto);
     }
 }
-
 // ==========================================
 // 3. CONTROLE DE ORDENAÇÃO
 // ==========================================
@@ -258,4 +238,5 @@ window.onload = () => {
         };
     }
 };
+
 
