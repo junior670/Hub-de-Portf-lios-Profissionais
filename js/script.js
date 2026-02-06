@@ -11,7 +11,9 @@ const firebaseConfig = {
     appId: "1:569514414525:web:a2a50953c3cc43446642d4"
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.database();
 
 // ==========================================
@@ -21,7 +23,7 @@ let modoOrdem = 'alpha';
 let ultimoLiderId = null; 
 
 // ==========================================
-// 2. LÓGICA DE XP, RANKING E VOZ
+// 2. LÓGICA DE XP, RANKING E VOZ ÉPICA
 // ==========================================
 
 function obterStatusXP(views) {
@@ -44,41 +46,23 @@ function obterRankings() {
 }
 
 function anunciarNovoLider(idLider) {
-    const todasAsListas = [
-        ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
-        ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
-        ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
-        ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
-        ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
-    ];
-    
-    const dadosLider = todasAsListas.find(p => String(p.id || p.nome) === String(idLider));
+    const todas = obterTodasAsListas();
+    const dadosLider = todas.find(p => String(p.id || p.nome).trim() === String(idLider).trim());
     const nomeLider = dadosLider ? (dadosLider.nome || dadosLider.titulo) : "Um novo herói";
 
-    // 1. Feedback Visual
-    mostrarAviso(`⚔️ GLÓRIA AO NOVO LÍDER: ${nomeLider.toUpperCase()}!`);
+    mostrarAviso(`⚔️ NOVO LÍDER: ${nomeLider.toUpperCase()}!`);
 
-    // 2. Vibração (Efeito de Impacto no Celular)
-    // O padrão [200, 100, 200] faz: treme, para, treme forte.
-    if ('vibrate' in navigator) {
-        navigator.vibrate([200, 100, 500]);
-    }
-
-    // 3. Voz de Guerreiro
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Para falas antigas
-
-        const mensagem = new SpeechSynthesisUtterance();
-        mensagem.text = `Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar no Hall da Fama! Glória ao novo líder!`;
-        mensagem.lang = 'pt-BR';
-        
-        // Ajustes para voz de Guerreiro
-        mensagem.pitch = 0.5;  // Voz bem grossa
-        mensagem.rate = 0.8;   // Fala pausada
-        mensagem.volume = 1;   
-        
-        window.speechSynthesis.speak(mensagem);
-    }
+    setTimeout(() => {
+        if ('vibrate' in navigator) navigator.vibrate([200, 100, 400]);
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(`Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar! Glória ao novo líder!`);
+            msg.lang = 'pt-BR';
+            msg.pitch = 0.5;
+            msg.rate = 0.8;
+            window.speechSynthesis.speak(msg);
+        }
+    }, 500);
 }
 
 function mostrarAviso(texto) {
@@ -97,8 +81,7 @@ async function compartilharStatus(event, nome, views, rank) {
     const msg = (rank && rank > 0) 
         ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama!` 
         : `🚀 Confira o projeto "${nome}"! Já tem ${views} visualizações.`;
-    const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
-    const textoCompleto = `${msg}\n\nAcesse: ${url}`;
+    const textoCompleto = `${msg}\n\nAcesse: https://junior670.github.io/Hub-de-Portf-lios-Profissionais/`;
 
     try {
         await navigator.clipboard.writeText(textoCompleto);
@@ -109,11 +92,25 @@ async function compartilharStatus(event, nome, views, rank) {
 }
 
 // ==========================================
-// 3. RENDERIZAÇÃO E INTERFACE
+// 3. AUXILIARES DE DADOS
+// ==========================================
+
+function obterTodasAsListas() {
+    return [
+        ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
+        ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
+        ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
+        ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
+        ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
+    ];
+}
+
+// ==========================================
+// 4. RENDERIZAÇÃO
 // ==========================================
 
 function criarCardHTML(item, rank = null) {
-    if (!item) return ""; // Proteção contra item nulo
+    if (!item) return "";
     const viewsData = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     const idItem = item.id || item.nome;
     const totalViews = viewsData[idItem] || 0;
@@ -143,24 +140,10 @@ function criarCardHTML(item, rank = null) {
 }
 
 function realizarBusca() {
-    const searchInput = document.getElementById('searchInput');
-    const termo = searchInput ? searchInput.value.toLowerCase() : "";
+    const termo = document.getElementById('searchInput')?.value.toLowerCase() || "";
     const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
 
-    const processarLista = (lista) => {
-        if (!lista) return [];
-        let resultado = lista.filter(item => 
-            (item.nome || item.titulo || "").toLowerCase().includes(termo) ||
-            (item.tags || "").toLowerCase().includes(termo) ||
-            (item.desc || item.bio || "").toLowerCase().includes(termo)
-        );
-        return modoOrdem === 'hot' 
-            ? resultado.sort((a, b) => (views[b.id || b.nome] || 0) - (views[a.id || a.nome] || 0))
-            : resultado.sort((a, b) => (a.nome || a.titulo || "").localeCompare(b.nome || b.titulo || ""));
-    };
-
-    // Atualiza as Grids principais
-    const secoes = [
+    const secoesMapping = [
         { id: 'gridPortfolios', lista: typeof listaPortfolios !== 'undefined' ? listaPortfolios : [] },
         { id: 'gridProjetos', lista: typeof listaProjetos !== 'undefined' ? listaProjetos : [] },
         { id: 'gridYoutubers', lista: typeof listaYoutubers !== 'undefined' ? listaYoutubers : [] },
@@ -168,15 +151,26 @@ function realizarBusca() {
         { id: 'gridApoiadores', lista: typeof listaApoiadores !== 'undefined' ? listaApoiadores : [] }
     ];
 
-    secoes.forEach(secao => {
-        const grid = document.getElementById(secao.id);
-        if (grid) {
-            const filtrados = processarLista(secao.lista);
-            grid.innerHTML = filtrados.map(item => criarCardHTML(item)).join('') || `<p style="grid-column:1/-1;text-align:center;color:#666;">Nenhum item encontrado.</p>`;
+    // Atualiza grids normais
+    secoesMapping.forEach(s => {
+        const grid = document.getElementById(s.id);
+        if (!grid) return;
+        
+        let filtrados = s.lista.filter(i => 
+            (i.nome||i.titulo||"").toLowerCase().includes(termo) || 
+            (i.tags||"").toLowerCase().includes(termo)
+        );
+
+        if (modoOrdem === 'hot') {
+            filtrados.sort((a,b) => (views[b.id||b.nome]||0) - (views[a.id||a.nome]||0));
+        } else {
+            filtrados.sort((a,b) => (a.nome||a.titulo||"").localeCompare(b.nome||b.titulo||""));
         }
+
+        grid.innerHTML = filtrados.map(item => criarCardHTML(item)).join('') || `<p style="grid-column:1/-1;text-align:center;">Nenhum item.</p>`;
     });
 
-    // --- CORREÇÃO DO HALL DA FAMA ---
+    // Hall da Fama (Top 3)
     const gridTop3 = document.getElementById('gridTop3');
     const secaoHall = document.getElementById('secaoHallDaFama');
     
@@ -185,14 +179,12 @@ function realizarBusca() {
             const rankings = obterRankings().slice(0, 3);
             if (rankings.length > 0) {
                 secaoHall.style.display = "block";
-                const todasAsListas = secoes.reduce((acc, curr) => acc.concat(curr.lista), []);
+                const todas = obterTodasAsListas();
                 
-                const itensTop3HTML = rankings.map((rankItem, index) => {
-                    const dadosCompletos = todasAsListas.find(p => String(p.id || p.nome) === String(rankItem[0]));
-                    return dadosCompletos ? criarCardHTML(dadosCompletos, index + 1) : "";
+                gridTop3.innerHTML = rankings.map((r, i) => {
+                    const dados = todas.find(p => String(p.id || p.nome).trim() === String(r[0]).trim());
+                    return dados ? criarCardHTML(dados, i + 1) : "";
                 }).join('');
-                
-                gridTop3.innerHTML = itensTop3HTML;
             } else {
                 secaoHall.style.display = "none";
             }
@@ -202,14 +194,22 @@ function realizarBusca() {
     }
 }
 
+function mudarOrdem(modo) { modoOrdem = modo; realizarBusca(); }
+
 // ==========================================
-// 4. INICIALIZAÇÃO E MONITORAMENTO
+// 5. INICIALIZAÇÃO
 // ==========================================
 
 window.onload = () => {
+    // Desbloqueio de Áudio/Vibração
+    document.body.addEventListener('click', () => {
+        if ('speechSynthesis' in window) window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+        if ('vibrate' in navigator) navigator.vibrate(10);
+    }, { once: true });
+
     database.ref('contagem_portfolios').on('value', (snapshot) => {
-        const dadosNuvem = snapshot.val() || {};
-        localStorage.setItem('contagem_portfolios', JSON.stringify(dadosNuvem));
+        const dados = snapshot.val() || {};
+        localStorage.setItem('contagem_portfolios', JSON.stringify(dados));
         
         const rankings = obterRankings();
         if (rankings.length > 0) {
@@ -222,11 +222,5 @@ window.onload = () => {
         realizarBusca();
     });
 
-    const inputBusca = document.getElementById('searchInput');
-    if (inputBusca) inputBusca.addEventListener('input', realizarBusca);
+    document.getElementById('searchInput')?.addEventListener('input', realizarBusca);
 };
-
-function mudarOrdem(modo) {
-    modoOrdem = modo;
-    realizarBusca();
-}
