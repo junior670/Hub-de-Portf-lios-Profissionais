@@ -55,16 +55,36 @@ function obterRankings() {
         .filter(entry => entry[1] > 0);
 }
 
-function compartilharStatus(nome, views, rank) {
+async function compartilharStatus(nome, views, rank) {
     const msg = rank 
         ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama da Galeria Tech!` 
         : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} views.`;
     
+    const url = window.location.href;
+
+    // 1. Tenta o compartilhamento nativo (Navegador/App que suporta)
     if (navigator.share) {
-        navigator.share({ title: 'Galeria Tech', text: msg, url: window.location.href });
-    } else {
-        navigator.clipboard.writeText(`${msg} ${window.location.href}`);
-        alert("Link e status copiados! 🚀");
+        try {
+            await navigator.share({
+                title: 'Galeria Tech',
+                text: msg,
+                url: url
+            });
+            return; // Se funcionou, encerra aqui
+        } catch (error) {
+            console.log("Erro no compartilhamento nativo, tentando copiar...");
+            // Se o usuário cancelar ou o App bloquear, ele cai no código abaixo
+        }
+    }
+
+    // 2. Plano B: Se estiver no App da Play Store ou navegador sem suporte
+    try {
+        await navigator.clipboard.writeText(`${msg} ${url}`);
+        alert("Link e status copiados para o seu teclado! 🚀\nAgora é só colar no WhatsApp ou LinkedIn.");
+    } catch (err) {
+        // Plano C: Última tentativa caso o clipboard também falhe
+        console.error("Falha ao copiar:", err);
+        alert("Ops! Por favor, copie o link da barra de endereços.");
     }
 }
 
@@ -220,4 +240,5 @@ window.onload = () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
     }
+
 };
