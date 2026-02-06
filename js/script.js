@@ -53,13 +53,16 @@ function anunciarNovoLider(idLider) {
     mostrarAviso(`⚔️ NOVO LÍDER: ${nomeLider.toUpperCase()}!`);
 
     setTimeout(() => {
+        // Vibração (Impacto)
         if ('vibrate' in navigator) navigator.vibrate([200, 100, 400]);
+
+        // Voz do Guerreiro
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(`Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar! Glória ao novo líder!`);
+            const msg = new SpeechSynthesisUtterance(`Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar no Hall da Fama! Glória ao novo líder!`);
             msg.lang = 'pt-BR';
-            msg.pitch = 0.5;
-            msg.rate = 0.8;
+            msg.pitch = 0.5; // Voz grossa
+            msg.rate = 0.8;  // Fala pausada
             window.speechSynthesis.speak(msg);
         }
     }, 500);
@@ -92,7 +95,7 @@ async function compartilharStatus(event, nome, views, rank) {
 }
 
 // ==========================================
-// 3. AUXILIARES DE DADOS
+// 3. AUXILIARES E RENDERIZAÇÃO
 // ==========================================
 
 function obterTodasAsListas() {
@@ -104,10 +107,6 @@ function obterTodasAsListas() {
         ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
     ];
 }
-
-// ==========================================
-// 4. RENDERIZAÇÃO
-// ==========================================
 
 function criarCardHTML(item, rank = null) {
     if (!item) return "";
@@ -151,62 +150,63 @@ function realizarBusca() {
         { id: 'gridApoiadores', lista: typeof listaApoiadores !== 'undefined' ? listaApoiadores : [] }
     ];
 
-    // Atualiza grids normais
     secoesMapping.forEach(s => {
         const grid = document.getElementById(s.id);
         if (!grid) return;
+        let filtrados = s.lista.filter(i => (i.nome||i.titulo||"").toLowerCase().includes(termo) || (i.tags||"").toLowerCase().includes(termo));
         
-        let filtrados = s.lista.filter(i => 
-            (i.nome||i.titulo||"").toLowerCase().includes(termo) || 
-            (i.tags||"").toLowerCase().includes(termo)
-        );
-
         if (modoOrdem === 'hot') {
             filtrados.sort((a,b) => (views[b.id||b.nome]||0) - (views[a.id||a.nome]||0));
         } else {
             filtrados.sort((a,b) => (a.nome||a.titulo||"").localeCompare(b.nome||b.titulo||""));
         }
-
         grid.innerHTML = filtrados.map(item => criarCardHTML(item)).join('') || `<p style="grid-column:1/-1;text-align:center;">Nenhum item.</p>`;
     });
 
-    // Hall da Fama (Top 3)
     const gridTop3 = document.getElementById('gridTop3');
     const secaoHall = document.getElementById('secaoHallDaFama');
-    
     if (gridTop3 && secaoHall) {
         if (termo === "") {
             const rankings = obterRankings().slice(0, 3);
             if (rankings.length > 0) {
                 secaoHall.style.display = "block";
                 const todas = obterTodasAsListas();
-                
                 gridTop3.innerHTML = rankings.map((r, i) => {
                     const dados = todas.find(p => String(p.id || p.nome).trim() === String(r[0]).trim());
                     return dados ? criarCardHTML(dados, i + 1) : "";
                 }).join('');
-            } else {
-                secaoHall.style.display = "none";
-            }
-        } else {
-            secaoHall.style.display = "none";
-        }
+            } else { secaoHall.style.display = "none"; }
+        } else { secaoHall.style.display = "none"; }
     }
 }
 
 function mudarOrdem(modo) { modoOrdem = modo; realizarBusca(); }
 
 // ==========================================
-// 5. INICIALIZAÇÃO
+// 4. INICIALIZAÇÃO E EVENTOS (ONLOAD)
 // ==========================================
 
 window.onload = () => {
-    // Desbloqueio de Áudio/Vibração
+    // 1. DESBLOQUEADOR (Ativa Áudio/Vibração no 1º clique)
     document.body.addEventListener('click', () => {
         if ('speechSynthesis' in window) window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
         if ('vibrate' in navigator) navigator.vibrate(10);
+        console.log("Sistemas de interação liberados!");
     }, { once: true });
 
+    // 2. BOTÃO IR PARA O TOPO
+    const btnTopo = document.getElementById('topBtn');
+    window.addEventListener('scroll', () => {
+        if (btnTopo) btnTopo.style.display = window.scrollY > 300 ? "block" : "none";
+    });
+    if (btnTopo) {
+        btnTopo.onclick = (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    }
+
+    // 3. SINCRONIZAÇÃO FIREBASE (Tempo Real)
     database.ref('contagem_portfolios').on('value', (snapshot) => {
         const dados = snapshot.val() || {};
         localStorage.setItem('contagem_portfolios', JSON.stringify(dados));
@@ -214,6 +214,7 @@ window.onload = () => {
         const rankings = obterRankings();
         if (rankings.length > 0) {
             const liderAtualId = rankings[0][0];
+            // Se o líder mudou, o Guerreiro anuncia!
             if (ultimoLiderId !== null && liderAtualId !== ultimoLiderId) {
                 anunciarNovoLider(liderAtualId);
             }
@@ -222,5 +223,6 @@ window.onload = () => {
         realizarBusca();
     });
 
+    // 4. CAMPO DE BUSCA
     document.getElementById('searchInput')?.addEventListener('input', realizarBusca);
 };
