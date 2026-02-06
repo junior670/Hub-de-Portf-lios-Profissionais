@@ -99,6 +99,7 @@ function mudarOrdem(modo) {
 // ==========================================
 
 function criarCardHTML(item, rank = null) {
+    // Usamos viewsData para não confundir com a função obterRankings
     const viewsData = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     const idItem = item.id || item.nome;
     const totalViews = viewsData[idItem] || 0;
@@ -134,9 +135,12 @@ function criarCardHTML(item, rank = null) {
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 ${item.link ? `
                     <a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">
-                        Ver Mais / Acessar
+                       Ver Mais / Acessar
                     </a>` : ''}
-                <button class="btn-share" onclick="compartilharStatus('${item.nome}', ${totalViews}, ${rank || 0})">📢 Compartilhar Status</button>
+                
+                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">
+                    📢 Compartilhar Status
+                </button>
             </div>
             
             <div class="tags" style="margin-top: 10px; font-size: 0.75em; color: var(--neon-blue);">${item.tags || ''}</div>
@@ -241,6 +245,7 @@ window.onload = () => {
         };
     }
 };
+
 
 
 
