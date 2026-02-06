@@ -21,6 +21,7 @@ const database = firebase.database();
 // ==========================================
 let modoOrdem = 'alpha'; 
 let ultimoLiderId = null; 
+let sonsPermitidos = false; // Controle de segurança para o Android
 
 // ==========================================
 // 2. LÓGICA DE XP, RANKING E VOZ ÉPICA
@@ -40,32 +41,36 @@ function registrarVisualizacao(idItem) {
 
 function obterRankings() {
     const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
-    return Object.entries(views)
-        .filter(entry => entry[1] > 0)
-        .sort((a, b) => b[1] - a[1]);
+    return Object.entries(views).filter(e => e[1] > 0).sort((a, b) => b[1] - a[1]);
 }
 
 function anunciarNovoLider(idLider) {
-    const todas = obterTodasAsListas();
+    const todas = [
+        ...(typeof listaPortfolios!=='undefined'?listaPortfolios:[]),
+        ...(typeof listaProjetos!=='undefined'?listaProjetos:[]),
+        ...(typeof listaYoutubers!=='undefined'?listaYoutubers:[]),
+        ...(typeof listaNegocios!=='undefined'?listaNegocios:[]),
+        ...(typeof listaApoiadores!=='undefined'?listaApoiadores:[])
+    ];
+    
     const dadosLider = todas.find(p => String(p.id || p.nome).trim() === String(idLider).trim());
     const nomeLider = dadosLider ? (dadosLider.nome || dadosLider.titulo) : "Um novo herói";
 
+    // Notificação Visual (Sempre aparece)
     mostrarAviso(`⚔️ NOVO LÍDER: ${nomeLider.toUpperCase()}!`);
 
-    setTimeout(() => {
-        // Vibração (Impacto)
-        if ('vibrate' in navigator) navigator.vibrate([200, 100, 400]);
+    // Vibração (Requer permissão VIBRATE no AndroidManifest.xml do APK)
+    if ('vibrate' in navigator) navigator.vibrate([200, 100, 400]);
 
-        // Voz do Guerreiro
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(`Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar no Hall da Fama! Glória ao novo líder!`);
-            msg.lang = 'pt-BR';
-            msg.pitch = 0.5; // Voz grossa
-            msg.rate = 0.8;  // Fala pausada
-            window.speechSynthesis.speak(msg);
-        }
-    }, 500);
+    // Voz do Guerreiro (Só fala se o usuário já tocou na tela uma vez)
+    if (sonsPermitidos && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(`Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar no Hall da Fama! Glória ao novo líder!`);
+        msg.lang = 'pt-BR';
+        msg.pitch = 0.5; 
+        msg.rate = 0.8;
+        window.speechSynthesis.speak(msg);
+    }
 }
 
 function mostrarAviso(texto) {
@@ -81,32 +86,17 @@ function mostrarAviso(texto) {
 
 async function compartilharStatus(event, nome, views, rank) {
     if (event) { event.preventDefault(); event.stopPropagation(); }
-    const msg = (rank && rank > 0) 
-        ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama!` 
-        : `🚀 Confira o projeto "${nome}"! Já tem ${views} visualizações.`;
-    const textoCompleto = `${msg}\n\nAcesse: https://junior670.github.io/Hub-de-Portf-lios-Profissionais/`;
-
+    const msg = (rank && rank > 0) ? `🏆 "${nome}" está em ${rank}º no Hall da Fama!` : `🚀 "${nome}" tem ${views} visualizações.`;
+    const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
     try {
-        await navigator.clipboard.writeText(textoCompleto);
+        await navigator.clipboard.writeText(`${msg}\n\nAcesse: ${url}`);
         mostrarAviso("✅ Status Copiado!");
-    } catch (err) {
-        window.prompt("Copie o texto:", textoCompleto);
-    }
+    } catch (err) { window.prompt("Copie:", `${msg}\n${url}`); }
 }
 
 // ==========================================
-// 3. AUXILIARES E RENDERIZAÇÃO
+// 3. RENDERIZAÇÃO E BUSCA
 // ==========================================
-
-function obterTodasAsListas() {
-    return [
-        ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
-        ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
-        ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
-        ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
-        ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
-    ];
-}
 
 function criarCardHTML(item, rank = null) {
     if (!item) return "";
@@ -128,8 +118,8 @@ function criarCardHTML(item, rank = null) {
             <p style="color: var(--neon-purple); font-size: 0.75em; font-weight: bold; margin-bottom: 5px;">🔥 ${totalViews} visualizações</p>
             <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9em; flex-grow: 1;">${item.desc || item.bio || "Clique para saber mais."}</p>
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                ${item.link ? `<a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">Ver Mais / Acessar</a>` : ''}
-                <button class="btn-share" style="color: #00f3ff !important; border: 1px solid #00f3ff; background: transparent; padding: 8px; border-radius: 4px; cursor: pointer;" onclick="compartilharStatus(event, '${item.nome || item.titulo}', ${totalViews}, ${rank || 0})">
+                ${item.link ? `<a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">Ver Mais</a>` : ''}
+                <button class="btn-share" style="color: #00f3ff !important; border: 1px solid #00f3ff; background: transparent; padding: 8px; border-radius: 4px;" onclick="compartilharStatus(event, '${item.nome || item.titulo}', ${totalViews}, ${rank || 0})">
                     📢 Compartilhar Status
                 </button>
             </div>
@@ -141,25 +131,30 @@ function criarCardHTML(item, rank = null) {
 function realizarBusca() {
     const termo = document.getElementById('searchInput')?.value.toLowerCase() || "";
     const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
-
-    const secoesMapping = [
-        { id: 'gridPortfolios', lista: typeof listaPortfolios !== 'undefined' ? listaPortfolios : [] },
-        { id: 'gridProjetos', lista: typeof listaProjetos !== 'undefined' ? listaProjetos : [] },
-        { id: 'gridYoutubers', lista: typeof listaYoutubers !== 'undefined' ? listaYoutubers : [] },
-        { id: 'gridNegocios', lista: typeof listaNegocios !== 'undefined' ? listaNegocios : [] },
-        { id: 'gridApoiadores', lista: typeof listaApoiadores !== 'undefined' ? listaApoiadores : [] }
+    const grids = ['gridPortfolios', 'gridProjetos', 'gridYoutubers', 'gridNegocios', 'gridApoiadores'];
+    const todasListas = [
+        ...(typeof listaPortfolios!=='undefined'?listaPortfolios:[]),
+        ...(typeof listaProjetos!=='undefined'?listaProjetos:[]),
+        ...(typeof listaYoutubers!=='undefined'?listaYoutubers:[]),
+        ...(typeof listaNegocios!=='undefined'?listaNegocios:[]),
+        ...(typeof listaApoiadores!=='undefined'?listaApoiadores:[])
     ];
 
-    secoesMapping.forEach(s => {
-        const grid = document.getElementById(s.id);
+    grids.forEach(id => {
+        const grid = document.getElementById(id);
         if (!grid) return;
-        let filtrados = s.lista.filter(i => (i.nome||i.titulo||"").toLowerCase().includes(termo) || (i.tags||"").toLowerCase().includes(termo));
+        let listaOriginal = [];
+        if(id==='gridPortfolios') listaOriginal = typeof listaPortfolios!=='undefined'?listaPortfolios:[];
+        else if(id==='gridProjetos') listaOriginal = typeof listaProjetos!=='undefined'?listaProjetos:[];
+        else if(id==='gridYoutubers') listaOriginal = typeof listaYoutubers!=='undefined'?listaYoutubers:[];
+        else if(id==='gridNegocios') listaOriginal = typeof listaNegocios!=='undefined'?listaNegocios:[];
+        else if(id==='gridApoiadores') listaOriginal = typeof listaApoiadores!=='undefined'?listaApoiadores:[];
+
+        let filtrados = listaOriginal.filter(i => (i.nome||i.titulo||"").toLowerCase().includes(termo) || (i.tags||"").toLowerCase().includes(termo));
         
-        if (modoOrdem === 'hot') {
-            filtrados.sort((a,b) => (views[b.id||b.nome]||0) - (views[a.id||a.nome]||0));
-        } else {
-            filtrados.sort((a,b) => (a.nome||a.titulo||"").localeCompare(b.nome||b.titulo||""));
-        }
+        if (modoOrdem === 'hot') filtrados.sort((a,b) => (views[b.id||b.nome]||0) - (views[a.id||a.nome]||0));
+        else filtrados.sort((a,b) => (a.nome||a.titulo||"").localeCompare(b.nome||b.titulo||""));
+
         grid.innerHTML = filtrados.map(item => criarCardHTML(item)).join('') || `<p style="grid-column:1/-1;text-align:center;">Nenhum item.</p>`;
     });
 
@@ -170,10 +165,9 @@ function realizarBusca() {
             const rankings = obterRankings().slice(0, 3);
             if (rankings.length > 0) {
                 secaoHall.style.display = "block";
-                const todas = obterTodasAsListas();
                 gridTop3.innerHTML = rankings.map((r, i) => {
-                    const dados = todas.find(p => String(p.id || p.nome).trim() === String(r[0]).trim());
-                    return dados ? criarCardHTML(dados, i + 1) : "";
+                    const d = todasListas.find(p => String(p.id || p.nome).trim() === String(r[0]).trim());
+                    return d ? criarCardHTML(d, i + 1) : "";
                 }).join('');
             } else { secaoHall.style.display = "none"; }
         } else { secaoHall.style.display = "none"; }
@@ -183,18 +177,23 @@ function realizarBusca() {
 function mudarOrdem(modo) { modoOrdem = modo; realizarBusca(); }
 
 // ==========================================
-// 4. INICIALIZAÇÃO E EVENTOS (ONLOAD)
+// 4. INICIALIZAÇÃO E EVENTOS
 // ==========================================
 
 window.onload = () => {
-    // 1. DESBLOQUEADOR (Ativa Áudio/Vibração no 1º clique)
+    // DESBLOQUEIO DE SONS (Crucial para o App)
     document.body.addEventListener('click', () => {
-        if ('speechSynthesis' in window) window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
-        if ('vibrate' in navigator) navigator.vibrate(10);
-        console.log("Sistemas de interação liberados!");
+        if (!sonsPermitidos) {
+            sonsPermitidos = true;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+            }
+            mostrarAviso("🔊 Sons de batalha ativados!");
+            console.log("Sistema de áudio liberado pelo usuário.");
+        }
     }, { once: true });
 
-    // 2. BOTÃO IR PARA O TOPO
+    // BOTÃO IR PARA O TOPO
     const btnTopo = document.getElementById('topBtn');
     window.addEventListener('scroll', () => {
         if (btnTopo) btnTopo.style.display = window.scrollY > 300 ? "block" : "none";
@@ -206,7 +205,7 @@ window.onload = () => {
         };
     }
 
-    // 3. SINCRONIZAÇÃO FIREBASE (Tempo Real)
+    // SINCRONIZAÇÃO FIREBASE
     database.ref('contagem_portfolios').on('value', (snapshot) => {
         const dados = snapshot.val() || {};
         localStorage.setItem('contagem_portfolios', JSON.stringify(dados));
@@ -214,7 +213,6 @@ window.onload = () => {
         const rankings = obterRankings();
         if (rankings.length > 0) {
             const liderAtualId = rankings[0][0];
-            // Se o líder mudou, o Guerreiro anuncia!
             if (ultimoLiderId !== null && liderAtualId !== ultimoLiderId) {
                 anunciarNovoLider(liderAtualId);
             }
@@ -223,6 +221,5 @@ window.onload = () => {
         realizarBusca();
     });
 
-    // 4. CAMPO DE BUSCA
     document.getElementById('searchInput')?.addEventListener('input', realizarBusca);
 };
