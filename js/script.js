@@ -11,7 +11,6 @@ const firebaseConfig = {
     appId: "1:569514414525:web:a2a50953c3cc43446642d4"
 };
 
-// Inicializa o Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
@@ -19,30 +18,22 @@ const database = firebase.database();
 // 1. VARIÁVEIS GLOBAIS E ESTADO
 // ==========================================
 let modoOrdem = 'alpha'; 
+let ultimoLiderId = null; 
 
 // ==========================================
-// 2. LÓGICA DE XP, RANKING E STATUS
+// 2. LÓGICA DE XP, RANKING E VOZ
 // ==========================================
 
 function obterStatusXP(views) {
     if (views >= 100) return { label: "💎 LENDÁRIO", class: "legendary", percent: 100 };
-    if (views >= 50) {
-        let p = ((views - 50) / 50) * 100;
-        return { label: "🔥 ELITE", class: "elite", percent: Math.min(p, 100) };
-    }
-    if (views >= 10) {
-        let p = ((views - 10) / 40) * 100;
-        return { label: "⚡ PRO", class: "pro", percent: p };
-    }
-    let p = (views / 10) * 100;
-    return { label: "🌱 INICIANTE", class: "newbie", percent: p };
+    if (views >= 50) return { label: "🔥 ELITE", class: "elite", percent: Math.min(((views - 50) / 50) * 100, 100) };
+    if (views >= 10) return { label: "⚡ PRO", class: "pro", percent: ((views - 10) / 40) * 100 };
+    return { label: "🌱 INICIANTE", class: "newbie", percent: (views / 10) * 100 };
 }
 
 function registrarVisualizacao(idItem) {
     const ref = database.ref('contagem_portfolios/' + idItem);
-    ref.transaction((currentViews) => {
-        return (currentViews || 0) + 1;
-    });
+    ref.transaction((currentViews) => (currentViews || 0) + 1);
 }
 
 function obterRankings() {
@@ -52,109 +43,104 @@ function obterRankings() {
         .sort((a, b) => b[1] - a[1]);
 }
 
-// Função para mostrar o aviso na tela (Toast)
+function anunciarNovoLider(idLider) {
+    const todasAsListas = [
+        ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
+        ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
+        ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
+        ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
+        ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
+    ];
+    
+    const dadosLider = todasAsListas.find(p => String(p.id || p.nome) === String(idLider));
+    const nomeLider = dadosLider ? (dadosLider.nome || dadosLider.titulo) : "Um novo herói";
+
+    // 1. Feedback Visual
+    mostrarAviso(`⚔️ GLÓRIA AO NOVO LÍDER: ${nomeLider.toUpperCase()}!`);
+
+    // 2. Vibração (Efeito de Impacto no Celular)
+    // O padrão [200, 100, 200] faz: treme, para, treme forte.
+    if ('vibrate' in navigator) {
+        navigator.vibrate([200, 100, 500]);
+    }
+
+    // 3. Voz de Guerreiro
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Para falas antigas
+
+        const mensagem = new SpeechSynthesisUtterance();
+        mensagem.text = `Contemplem! ${nomeLider} acaba de conquistar o primeiro lugar no Hall da Fama! Glória ao novo líder!`;
+        mensagem.lang = 'pt-BR';
+        
+        // Ajustes para voz de Guerreiro
+        mensagem.pitch = 0.5;  // Voz bem grossa
+        mensagem.rate = 0.8;   // Fala pausada
+        mensagem.volume = 1;   
+        
+        window.speechSynthesis.speak(mensagem);
+    }
+}
+
 function mostrarAviso(texto) {
     const toast = document.createElement('div');
     toast.className = 'toast-sucesso';
     toast.innerText = texto;
     document.body.appendChild(toast);
-
     setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 500);
-    }, 3000);
+    }, 3500);
 }
 
 async function compartilharStatus(event, nome, views, rank) {
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
+    if (event) { event.preventDefault(); event.stopPropagation(); }
     const msg = (rank && rank > 0) 
         ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama!` 
         : `🚀 Confira o projeto "${nome}"! Já tem ${views} visualizações.`;
-    
     const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
     const textoCompleto = `${msg}\n\nAcesse: ${url}`;
 
     try {
         await navigator.clipboard.writeText(textoCompleto);
-        mostrarAviso("✅ Status Copiado! Cole no WhatsApp.");
+        mostrarAviso("✅ Status Copiado!");
     } catch (err) {
         window.prompt("Copie o texto:", textoCompleto);
     }
 }
 
 // ==========================================
-// 3. CONTROLE DE ORDENAÇÃO
-// ==========================================
-
-function mudarOrdem(modo) {
-    modoOrdem = modo;
-    const btnAlpha = document.getElementById('btnSortAlpha');
-    const btnHot = document.getElementById('btnSortHot');
-    if (btnAlpha) btnAlpha.classList.toggle('active', modo === 'alpha');
-    if (btnHot) btnHot.classList.toggle('active', modo === 'hot');
-    realizarBusca();
-}
-
-// ==========================================
-// 4. RENDERIZADOR DE CARDS
+// 3. RENDERIZAÇÃO E INTERFACE
 // ==========================================
 
 function criarCardHTML(item, rank = null) {
+    if (!item) return ""; // Proteção contra item nulo
     const viewsData = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     const idItem = item.id || item.nome;
     const totalViews = viewsData[idItem] || 0;
     const status = obterStatusXP(totalViews);
-    
-    const rankingsGerais = obterRankings().slice(0, 10).map(e => e[0]);
-    const isTop10 = rankingsGerais.includes(String(idItem)) && totalViews > 0;
 
     return `
-        <div class="card ${isTop10 ? 'top-vistos' : ''}" style="position:relative;">
+        <div class="card" style="position:relative;">
             ${rank ? `<div class="rank-badge">${rank}º</div>` : ''}
             ${item.imagem ? `<img src="${item.imagem}" alt="${item.nome}" class="card-img">` : ''}
-            
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 5px;">
                 <span class="xp-badge xp-${status.class}">${status.label}</span>
                 <span style="font-size:0.7em; color:#666;">${Math.floor(status.percent)}%</span>
             </div>
-
-            <div class="xp-container">
-                <div class="xp-bar bar-${status.class}" style="width: ${status.percent}%;"></div>
-            </div>
-            
+            <div class="xp-container"><div class="xp-bar bar-${status.class}" style="width: ${status.percent}%;"></div></div>
             <h3>${item.nome || item.titulo || "Sem Nome"}</h3>
-            
-            <p style="color: var(--neon-purple); font-size: 0.75em; font-weight: bold; margin-bottom: 5px;">
-                🔥 ${totalViews} visualizações
-            </p>
-
-            <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9em; flex-grow: 1;">
-                ${item.desc || item.bio || "Clique para saber mais."}
-            </p>
-
+            <p style="color: var(--neon-purple); font-size: 0.75em; font-weight: bold; margin-bottom: 5px;">🔥 ${totalViews} visualizações</p>
+            <p style="margin-bottom: 15px; color: #ccc; font-size: 0.9em; flex-grow: 1;">${item.desc || item.bio || "Clique para saber mais."}</p>
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                ${item.link ? `
-                    <a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">
-                       Ver Mais / Acessar
-                    </a>` : ''}
-                
-                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">
+                ${item.link ? `<a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">Ver Mais / Acessar</a>` : ''}
+                <button class="btn-share" style="color: #00f3ff !important; border: 1px solid #00f3ff; background: transparent; padding: 8px; border-radius: 4px; cursor: pointer;" onclick="compartilharStatus(event, '${item.nome || item.titulo}', ${totalViews}, ${rank || 0})">
                     📢 Compartilhar Status
                 </button>
             </div>
-            
-            <div class="tags" style="margin-top: 10px; font-size: 0.75em; color: var(--neon-blue);">${item.tags || ''}</div>
+            <div class="tags" style="margin-top: 10px; font-size: 0.75em; color: #00f3ff;">${item.tags || ''}</div>
         </div>
     `;
 }
-
-// ==========================================
-// 5. BUSCA E ATUALIZAÇÃO GLOBAL
-// ==========================================
 
 function realizarBusca() {
     const searchInput = document.getElementById('searchInput');
@@ -165,55 +151,51 @@ function realizarBusca() {
         if (!lista) return [];
         let resultado = lista.filter(item => 
             (item.nome || item.titulo || "").toLowerCase().includes(termo) ||
-            (item.desc || item.bio || "").toLowerCase().includes(termo) ||
-            (item.tags || "").toLowerCase().includes(termo)
+            (item.tags || "").toLowerCase().includes(termo) ||
+            (item.desc || item.bio || "").toLowerCase().includes(termo)
         );
-
-        if (modoOrdem === 'hot') {
-            return resultado.sort((a, b) => (views[b.id || b.nome] || 0) - (views[a.id || a.nome] || 0));
-        } else {
-            return resultado.sort((a, b) => (a.nome || a.titulo || "").localeCompare(b.nome || b.titulo || ""));
-        }
+        return modoOrdem === 'hot' 
+            ? resultado.sort((a, b) => (views[b.id || b.nome] || 0) - (views[a.id || a.nome] || 0))
+            : resultado.sort((a, b) => (a.nome || a.titulo || "").localeCompare(b.nome || b.titulo || ""));
     };
 
+    // Atualiza as Grids principais
     const secoes = [
-        { lista: typeof listaPortfolios !== 'undefined' ? listaPortfolios : [], id: 'gridPortfolios' },
-        { lista: typeof listaProjetos !== 'undefined' ? listaProjetos : [], id: 'gridProjetos' },
-        { lista: typeof listaYoutubers !== 'undefined' ? listaYoutubers : [], id: 'gridYoutubers' },
-        { lista: typeof listaNegocios !== 'undefined' ? listaNegocios : [], id: 'gridNegocios' },
-        { lista: typeof listaApoiadores !== 'undefined' ? listaApoiadores : [], id: 'gridApoiadores' }
+        { id: 'gridPortfolios', lista: typeof listaPortfolios !== 'undefined' ? listaPortfolios : [] },
+        { id: 'gridProjetos', lista: typeof listaProjetos !== 'undefined' ? listaProjetos : [] },
+        { id: 'gridYoutubers', lista: typeof listaYoutubers !== 'undefined' ? listaYoutubers : [] },
+        { id: 'gridNegocios', lista: typeof listaNegocios !== 'undefined' ? listaNegocios : [] },
+        { id: 'gridApoiadores', lista: typeof listaApoiadores !== 'undefined' ? listaApoiadores : [] }
     ];
 
     secoes.forEach(secao => {
         const grid = document.getElementById(secao.id);
         if (grid) {
-            const final = processarLista(secao.lista);
-            grid.innerHTML = final.length > 0 
-                ? final.map(item => criarCardHTML(item)).join('')
-                : `<p style="color: #666; grid-column: 1/-1; text-align: center;">Nenhum item encontrado.</p>`;
+            const filtrados = processarLista(secao.lista);
+            grid.innerHTML = filtrados.map(item => criarCardHTML(item)).join('') || `<p style="grid-column:1/-1;text-align:center;color:#666;">Nenhum item encontrado.</p>`;
         }
     });
 
-    const secaoHall = document.getElementById('secaoHallDaFama');
+    // --- CORREÇÃO DO HALL DA FAMA ---
     const gridTop3 = document.getElementById('gridTop3');
-
-    if (secaoHall && gridTop3) {
-        const rankings = obterRankings().slice(0, 3);
-        if (termo === "" && rankings.length > 0) {
-            secaoHall.style.display = "block";
-            const todasAsListas = [
-                ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
-                ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
-                ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
-                ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
-                ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
-            ];
-
-            const itensTop3 = rankings.map(rankItem => {
-                return todasAsListas.find(p => (p.id || p.nome) == rankItem[0]);
-            }).filter(i => i);
-
-            gridTop3.innerHTML = itensTop3.map((item, index) => criarCardHTML(item, index + 1)).join('');
+    const secaoHall = document.getElementById('secaoHallDaFama');
+    
+    if (gridTop3 && secaoHall) {
+        if (termo === "") {
+            const rankings = obterRankings().slice(0, 3);
+            if (rankings.length > 0) {
+                secaoHall.style.display = "block";
+                const todasAsListas = secoes.reduce((acc, curr) => acc.concat(curr.lista), []);
+                
+                const itensTop3HTML = rankings.map((rankItem, index) => {
+                    const dadosCompletos = todasAsListas.find(p => String(p.id || p.nome) === String(rankItem[0]));
+                    return dadosCompletos ? criarCardHTML(dadosCompletos, index + 1) : "";
+                }).join('');
+                
+                gridTop3.innerHTML = itensTop3HTML;
+            } else {
+                secaoHall.style.display = "none";
+            }
         } else {
             secaoHall.style.display = "none";
         }
@@ -221,28 +203,30 @@ function realizarBusca() {
 }
 
 // ==========================================
-// 6. INICIALIZAÇÃO E SINCRONIZAÇÃO EM TEMPO REAL
+// 4. INICIALIZAÇÃO E MONITORAMENTO
 // ==========================================
 
 window.onload = () => {
     database.ref('contagem_portfolios').on('value', (snapshot) => {
         const dadosNuvem = snapshot.val() || {};
         localStorage.setItem('contagem_portfolios', JSON.stringify(dadosNuvem));
+        
+        const rankings = obterRankings();
+        if (rankings.length > 0) {
+            const liderAtualId = rankings[0][0];
+            if (ultimoLiderId !== null && liderAtualId !== ultimoLiderId) {
+                anunciarNovoLider(liderAtualId);
+            }
+            ultimoLiderId = liderAtualId;
+        }
         realizarBusca();
     });
 
     const inputBusca = document.getElementById('searchInput');
     if (inputBusca) inputBusca.addEventListener('input', realizarBusca);
-
-    const btnTopo = document.getElementById('topBtn');
-    window.addEventListener('scroll', () => {
-        if (btnTopo) btnTopo.style.display = window.scrollY > 300 ? "block" : "none";
-    });
-
-    if (btnTopo) {
-        btnTopo.onclick = (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    }
 };
+
+function mudarOrdem(modo) {
+    modoOrdem = modo;
+    realizarBusca();
+}
