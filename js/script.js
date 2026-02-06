@@ -38,7 +38,6 @@ function obterStatusXP(views) {
     return { label: "🌱 INICIANTE", class: "newbie", percent: p };
 }
 
-// Incrementa visualização na Nuvem
 function registrarVisualizacao(idItem) {
     const ref = database.ref('contagem_portfolios/' + idItem);
     ref.transaction((currentViews) => {
@@ -46,7 +45,6 @@ function registrarVisualizacao(idItem) {
     });
 }
 
-// Obtém ranking baseado nos dados sincronizados do Firebase
 function obterRankings() {
     const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     return Object.entries(views)
@@ -54,14 +52,13 @@ function obterRankings() {
         .sort((a, b) => b[1] - a[1]);
 }
 
-// Função para mostrar o aviso na tela sem usar alert()
+// Função para mostrar o aviso na tela (Toast)
 function mostrarAviso(texto) {
     const toast = document.createElement('div');
     toast.className = 'toast-sucesso';
     toast.innerText = texto;
     document.body.appendChild(toast);
 
-    // Remove o aviso depois de 3 segundos
     setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 500);
@@ -81,13 +78,10 @@ async function compartilharStatus(event, nome, views, rank) {
     const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
     const textoCompleto = `${msg}\n\nAcesse: ${url}`;
 
-    // Tenta copiar
     try {
         await navigator.clipboard.writeText(textoCompleto);
-        // EM VEZ DE ALERT, USAMOS NOSSO AVISO INTERNO
         mostrarAviso("✅ Status Copiado! Cole no WhatsApp.");
     } catch (err) {
-        // Se falhar, o prompt ainda é a última opção
         window.prompt("Copie o texto:", textoCompleto);
     }
 }
@@ -110,7 +104,6 @@ function mudarOrdem(modo) {
 // ==========================================
 
 function criarCardHTML(item, rank = null) {
-    // Usamos viewsData para não confundir com a função obterRankings
     const viewsData = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     const idItem = item.id || item.nome;
     const totalViews = viewsData[idItem] || 0;
@@ -149,7 +142,7 @@ function criarCardHTML(item, rank = null) {
                        Ver Mais / Acessar
                     </a>` : ''}
                 
-                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">📢 Compartilhar Status</button>
+                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">
                     📢 Compartilhar Status
                 </button>
             </div>
@@ -208,8 +201,6 @@ function realizarBusca() {
         const rankings = obterRankings().slice(0, 3);
         if (termo === "" && rankings.length > 0) {
             secaoHall.style.display = "block";
-            
-            // Reúne todas as listas para encontrar o objeto completo do Top 3
             const todasAsListas = [
                 ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
                 ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
@@ -234,11 +225,10 @@ function realizarBusca() {
 // ==========================================
 
 window.onload = () => {
-    // Sincronização em Tempo Real com Firebase
     database.ref('contagem_portfolios').on('value', (snapshot) => {
         const dadosNuvem = snapshot.val() || {};
         localStorage.setItem('contagem_portfolios', JSON.stringify(dadosNuvem));
-        realizarBusca(); // Re-renderiza tudo com os números novos
+        realizarBusca();
     });
 
     const inputBusca = document.getElementById('searchInput');
@@ -256,10 +246,3 @@ window.onload = () => {
         };
     }
 };
-
-
-
-
-
-
-
