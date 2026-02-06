@@ -55,29 +55,32 @@ function obterRankings() {
 }
 
 // FUNÇÃO BLINDADA: Compartilhamento que não trava o App da Play Store
-async function compartilharStatus(nome, views, rank) {
+async function compartilharStatus(event, nome, views, rank) {
+    // 1. IMPEDE O APP DE TENTAR NAVEGAR OU RECARREGAR
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     const msg = (rank && rank > 0) 
         ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama da Galeria Tech!` 
         : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} visualizações.`;
     
-    const url = window.location.href;
-    const textoCompleto = `${msg}\n\nAcesse aqui: ${url}`;
+    const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
+    const textoCompleto = `${msg}\n\nAcesse: ${url}`;
 
-    // 1. Tenta copiar direto para o teclado (Clipboard)
-    // É a forma mais segura que não trava e não sai do App
     try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(textoCompleto);
-            alert("✅ STATUS COPIADO!\n\nO link e o ranking já estão no seu teclado. Agora é só abrir o WhatsApp ou LinkedIn e 'Colar' na sua mensagem! 🚀");
-        } else {
-            // Plano de fundo se o clipboard falhar
-            throw new Error('Clipboard não disponível');
-        }
+        // Tenta copiar para o teclado
+        await navigator.clipboard.writeText(textoCompleto);
+        alert("✅ STATUS COPIADO!\n\nO ranking já está no seu teclado. Agora é só abrir o WhatsApp e 'Colar'! 🚀");
     } catch (err) {
-        // Se tudo falhar, ele mostra o texto numa caixinha para o usuário copiar manualmente
-        window.prompt("O App bloqueou o compartilhamento automático. Copie o texto abaixo para postar:", textoCompleto);
+        // Se o Clipboard falhar, o prompt é o método que NUNCA trava
+        window.prompt("Copie o status abaixo para compartilhar:", textoCompleto);
     }
+    
+    return false; // Garantia extra para o Android não navegar
 }
+
 // ==========================================
 // 3. CONTROLE DE ORDENAÇÃO
 // ==========================================
@@ -238,5 +241,6 @@ window.onload = () => {
         };
     }
 };
+
 
 
