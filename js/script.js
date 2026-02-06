@@ -87,12 +87,6 @@ function compartilharStatus(event, nome, views, rank) {
     }
 }
 
-// Função de apoio que o Android não bloqueia
-function abrirPromptManual(texto) {
-    // O Prompt abre uma caixa com o texto já selecionado para o usuário copiar
-    // É o método mais antigo e infalível da web
-    window.prompt("Copie o status abaixo para compartilhar no WhatsApp/LinkedIn:", texto);
-}
 // ==========================================
 // 3. CONTROLE DE ORDENAÇÃO
 // ==========================================
@@ -257,6 +251,7 @@ window.onload = () => {
         };
     }
 };
+
 
 
 
