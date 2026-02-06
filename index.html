@@ -1,787 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hub de Portfólios Profissionais</title>
-<style>
-  /* Reset e estilos gerais */
-  * {margin:0; padding:0; box-sizing:border-box;}
-  body {
-    background-color: #0a0a0a;
-    font-family: 'Segoe UI', sans-serif;
-    color: #fff;
-    line-height: 1.6;
-  }
-  a {text-decoration: none; color: #0ff; transition: 0.3s;}
-  a:hover {color: #ff0; text-shadow: 0 0 5px #ff0;}
-
-  /* Header */
-  header {
-    background: linear-gradient(90deg, #0ff, #00f, #f0f);
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #0ff;
-    box-shadow: 0 0 10px #0ff;
-  }
-  header h1 {font-size: 2em; text-shadow:0 0 10px #0ff;}
-
-  /* Nav */
-  nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background-color: #111;
-    box-shadow: inset 0 -1px 2px #0ff;
-  }
-  nav a {margin: 10px 15px; font-weight: bold;}
-
-  /* Container */
-  .container {max-width: 1200px; margin: 30px auto; padding: 0 15px;}
-
-  /* Search */
-  .search-bar {text-align:center; margin-bottom:30px;}
-  .search-bar input {
-    width: 80%; max-width:500px;
-    padding:10px;
-    border-radius:10px;
-    border:2px solid #0ff;
-    background-color:#000; color:#0ff;
-    font-size:1em;
-  }
-
-  /* Section Titles */
-  .container h2 {border-left:5px solid #0ff; padding-left:10px; font-size:1.5em; margin-bottom:15px;}
-
-  /* Portfolio & Grid */
-  .portfolio, .showcase-grid {display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:20px;}
-  .card, .showcase-card {
-    background-color:#111; border:2px solid #0ff; border-radius:10px;
-    padding:15px; box-shadow:0 0 15px #0ff; transition:0.3s; text-align:center;
-  }
-  .card:hover, .showcase-card:hover {transform:scale(1.05); box-shadow:0 0 20px #ff0;}
-  .card a, .showcase-card a {font-weight:bold;}
-
-  /* Sponsors */
-  .sponsors {padding:30px; background-color:#111; border-top:2px solid #0ff; box-shadow:0 0 10px #0ff inset;}
-  .sponsor-banners {display:flex; flex-wrap:wrap; justify-content:center; gap:20px;}
-  .sponsor-banners img {max-width:200px; border:2px solid #0ff; border-radius:8px;}
-
-  /* Back to Top Flutuante */
-  .back-to-top {
-    position: fixed; bottom:20px; right:20px;
-    padding:12px 20px; background-color:#0ff; color:#000;
-    border:none; border-radius:50px; font-weight:bold; cursor:pointer;
-    box-shadow:0 0 10px #0ff; display:none; z-index:1000;
-    transition:all 0.3s; text-align:center;
-  }
-  .back-to-top:hover {background-color:#ff0; box-shadow:0 0 15px #ff0;}
-
-  /* Tabela de Avatares */
-  .table-container {overflow-x:auto; margin-top:30px;}
-  table {width:100%; border-collapse:collapse; background-color:#1a1a1a; border:2px solid #0ff; box-shadow:0 0 20px #0ff88c;}
-  th, td {border:1px solid #333; padding:12px; text-align:center;}
-  th {background-color:#111; color:#0ff; text-transform:uppercase;}
-  tr:nth-child(even){background-color:#222;}
-  .legendary {background:linear-gradient(90deg,#ffd700,#fff8dc,#ffd700); color:#000; font-weight:bold; animation:shine 3s infinite alternate;}
-  @keyframes shine {0%{box-shadow:0 0 10px #ffd700;} 100%{box-shadow:0 0 25px #ffd700,0 0 40px #fff8dc;}}
-
-  /* Footer */
-  footer {text-align:center; padding:20px; background-color:#000; color:#666; font-size:0.9em;}
-
-  /* Responsividade */
-  @media (max-width:600px){
-    nav a{margin:8px; font-size:0.9em;}
-    .card, .showcase-card{padding:10px;}
-    .search-bar input{width:95%;}
-    table th, table td{padding:8px; font-size:0.85em;}
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Hub de Portfólios Profissionais</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header id="inicio">
-  <h1>Hub de Portfólios Profissionais</h1>
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#portfolios">Portfólios</a>
-    <a href="#Projetos">Projetos em Destaque</a>
-    <a href="#negocios">Negócios Locais</a>
-    <a href="#youtubers">YouTubers</a>
-    <a href="#patrocinadores">Apoiadores</a>
-  </nav>
+    <h1 class="fogo-neon">Hub de Portfólios Profissionais</h1>
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#portfolios">Portfólios</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#negocios">Negócios</a>
+        <a href="#youtubers">YouTubers</a>
+        <a href="#patrocinadores">Apoiadores</a>
+        <a href="#avatares">Tabela Tech</a>
+        <a href="#redes">Redes Sociais</a>
+    </nav>
 </header>
 
-<!-- Sobre -->
-<div class="container" id="sobre">
-  <h2>Sobre o Hub</h2>
-  <p>Bem-vindo ao Hub de Portfólios Profissionais! Aqui você encontra perfis de profissionais de tecnologia, empreendedores digitais, negócios locais e talentos criativos. Nosso objetivo é fortalecer a rede de contatos e proporcionar visibilidade para projetos e habilidades de destaque.</p>
-</div>
-
-<!-- Portfólios -->
-<div class="container" id="portfolios">
-  <h2>Portfólios</h2>
-  <div class="search-bar">
-    <input type="text" id="searchInput" onkeyup="searchPortfolios()" placeholder="Buscar por nome ou site...">
-  </div>
-  <div class="category">
-    <h2>Empreendedores Digitais</h2>
-    <div class="portfolio" id="portfolioList">
-      <div class="card">
-          <h3>Junior Santos</h3>
-          <p><a href="https://junior670.github.io/Portf-lio/" target="_blank">Formado em Gestão da Tecnologia da Informação pela Fatec Jundiaí, com pós-graduação em Matemática Financeira, Estatística e Segurança da Informação. Perfil analítico, estratégico e apaixonado por tecnologia, gestão e inovação.</a></p> | Apaixonado por tecnologia🔥 | gestão🔥 | inovação🔥. | TechMaster 🧑‍💻| CyberGuard 🛡️| DataSensei 📊|CodeNinja 👨‍💻 / 👩‍💻| AI-Lover 🤖| EduCoder 📚⭐⭐⭐
-        </div>
-        <div class="card">
-          <h3>Mariana Dias</h3>
-          <p><a href="https://github.com/LabDevOps09/mariana-dias-portfolio" target="_blank">Profissional com sólida formação em análise de dados e segurança da informação, com experiência em soluções para infraestrutura de TI, automação de processos e análise de grandes volumes de dados. Especialista em Power BI, SQL, cibersegurança e administração Linux, com foco na otimização de ambientes em nuvem.</a></p> |Tecnologias Descentralizadas🔥 | Blockchain/Web3🔥 |(DAOs - NFTs - contratos inteligentes)🔥|.
-        </div>
-
-        <div class="card">
-          <h3>Fabricio Vieira</h3>
-          <p><a href="https://github.com/fanzz293" target="_blank">Sou formado como técnico de informática. Atualmente estou no 7º período de sistemas de informação | Mais de 10 anos de experiência com infraestrutura de PC's.</a></p>  |TI🔥| Sistemas🔥| Python🔥 |BI 🔥|.
-        </div>
-        
-        <div class="card">
-          <h3>Wesley schuab Vieira</h3>
-          <p><a href="https://github.com/WesleySchuab" target="_blank">Técnologo em Análise e Desenvolvimento de Sistemas pelo Instituto Federal de Educação, Ciência e Tecnologia de São Paulo
-            Criador de um aplicativo Android de sucesso.Tenho adquirido experiência desenvolvendo diversos projetos pessoais e profissionais que evidenciam minhas habilidades em programação, design de interfaces e resolução de problemas.</a></p> | Desenvolvedor Android🔥 | Kotlin🔥 | MVVM🔥 | Jetpack Compose🔥 | REST API🔥 | Retrofit🔥 | Firebase🔥 | Clean Architeture🔥 | Rom🔥 | Coroutines🔥 | Hilt🔥 | Navigation🔥 | Testing🔥 | GitHub🔥.
-        </div>
-
-        <div class="card">
-          <h3>Sérgio Sousa</h3>
-          <p><a href="https://portifolio-react-lovat.vercel.app/#projetos" target="_blank">Formação em Análise e Desenvolvimento de Sistemas pela UNIFATECIE, busco oportunidade e evoluir minha carreira como Web Developer Enginner Front-End Junior, desenvolvendo habilidades em projetos pessoais ou freelancer e treinamento com Bootcamp ou eventos na área de tecnologia. Atualmente estou melhorando meu inglês básico para melhor entendimento global e evolução na carreira com IA. Busco criar soluções que facilitem a vida das pessoas em resolver problemas com aplicativos web e espero contribuir com uma equipe inovadora.</a></p> | FrontEnd Developer Jr - JavaScript 🚀| CSS 💥| HTML 💥| React ✅| Git ✅| GitHub ✅| WSL ✅| TypeScript 🚀| Bootstrap ✅| Linux 💻| Windows 💻| Figma 📌| Markdown 📌| Azure💻 |
-        </div>
-
-        <div class="card">
-          <h3>Camila Madureira</h3>
-          <p><a href="https://github.com/ca-madureira" target="_blank">Estou em transição de carreira e atualmente, aprofundando meus conhecimentos em Desenvolvimento Web, com foco em tecnologias como React.js, Node.js, Express.js, Mongoose, MongoDB e Typescript.</a></p> | React🔥 - Next🔥 - Tailwindcss🔥 - Node🔥 - Express🔥 -  MongoDB🔥 - Javascript🔥 | WebCrafter🌐 | EduCoder 📚|
-        </div>
-
-        <div class="card">
-          <h3>Rafhael Augusto</h3>
-          <p><a href="https://github.com/Rafhael-Augusto" target="_blank">✨ Criando bugs desde 2024.
-            📚 Atualmente estou estudando back end.
-            🎯 Objetivo: Full Stack.
-            🎲 Fun fact: Comecei a me interessar no mundo da programação aos 13 anos de idade.</a></p> | Desenvolvedor Full Stack Python🔥 | JavaScript🔥 | TypeScript🔥 | Python🔥 | Styled Components🔥 | React Vite🔥 | Django🔥 | PostgreSQL🔥 | SQLite🔥 | REST API🔥 | Poetry🔥 | Pipenv🔥 | Git🔥 | GitHub🔥
-        </div>
-
-        <div class="card">
-          <h3>Guilherme Boaventtura</h3>
-          <p><a href="https://www.linkedin.com/in/guilherme-boaventura-097aa2210/" target="_blank">Olá! Sou Guilherme Silva, Tecnólogo em Gestão da Tecnologia da Informação com uma paixão por soluções tecnológicas que impulsionam a eficiência e a inovação. Minha experiência abrange diversos aspectos do setor de TI, com especializações em ERP, Power BI, redes, infraestrutura e processos.</a></p> | ERP🔥 | PowerBI 🔥| Redes 🔥 | InfraestruturaTI 🔥| GovernançaDeTI 🔥 | SegurançaDaInformação 🔥| Redes 🔥 | TecnologiaDaInformação 🔥| Estudante 🔥 | Aprendizagem 🔥 |  Proatividade 🔥 Colaboração 🔥
-        </div>
-
-        <div class="card">
-          <h3>Jessica Bueno</h3>
-          <p><a href="https://github.com/JessicaApBueno" target="_blank">Estou cursando um técnico em Desenvolvimento de Sistemas pela Fundação FAT.
-            Estou desenvolvendo meu aprendizado na plataforma Google Cloud Skill Boosts, visando aprofundar ainda mais na área de nuvem e também estou cursando o programa re/Start na Escola da Nuvem. Participo do Programa Descodificadas com foco em Front-End.</a></p> | Em transição de carreira para a área de TI🔥🔥🔥, com foco em desenvolvimento front-end e Cloud Computing.🔥
-        </div>
-
-
-        <div class="card">
-          <h3>Williams Ricardo</h3>
-          <p><a href="https://github.com/rickchallen" target="_blank">🎓 Sou Formado Em Sistemas de Informação e Técnico rem Redes de Computadores
-            🌱 No Momento eu estou aprimorando Meus Conhecimentos em Python , GO , segurança da informação e Dados...
-            ⚡ Gosto de Estudar Tecnologia e tocar instrumentos Musicais</a></p> | 🚀 Projetos em Destaques  - toolsAgency 🔥 | Desafio_phishing / Dio 🔥 | Sistema-BancarioV1_DIO 🔥| Projeto Previsão Do Tempo 🔥 
-        </div>
-
-        <div class="card">
-          <h3>Victor Tchiya Soares</h3>
-          <p><a href="https://github.com/VictorTchiya" target="_blank">Sou docente de Arte na Prefeitura de Osasco, atualmente em transição de carreira para Análise de Dados. Tenho experiência em teatro, dança e consciência corporal, e agora estou explorando o mundo dos dados!</a></p> | Análise de Dados🔥 | SQL🔥| Excel🔥| Python🔥 |
-        </div>
-
-        <div class="card">
-          <h3></h3>
-          <p><a href="https://github.com/thaisscheiner|" target="_blank">🎓 Estudante de Análise e Desenvolvimento de Sistemas - FATEC ZONA LESTE
-            💻 Apaixonada por tecnologia e sempre em busca de novos desafios
-            
-            🎓 Formação Acadêmica
-            🎓 Graduando Tecnologia em Análise e Desenvolvimento de Sistemas - Faculdade de Tecnologia da Zona Leste (FATEC ZONA LESTE)
-            🖥️ Técnico em Informática - Concluído em 2014 - Serviço Nacional de Aprendizagem Comercial (SENAC)</a></p> | Linguagens de Programação 🔥
-            |Java| C# |TypeScript|
-            
-            Frameworks e Tecnologias 🔥
-            Spring Boot| ASP.NET | SQL Server | REST API
-            
-            Front-end 🔥
-            Angular | ReactJS | HTML5 | CSS3
-        </div>
-
-        <div class="card">
-          <h3>Denise Henrique Mafra</h3>
-          <p><a href="https://github.com/DHMafra" target="_blank">Especialista em Educação com mais de 37 anos de experiência em ensino, gestão escolar e formação de professores. Cursou Mestrado em Educação e MBA em Gestão Escolar, além de uma sólida formação em Pedagogia e História. Ao longo da carreira, tem sido reconhecida pela atuação em projetos inovadores de educação, desenvolvimento de materiais didáticos, formação a distância e avaliação educacional. Destaca-se pela habilidade em promover aprendizagens provocativas, liderar iniciativas pedagógicas e implementar estratégias baseadas em metodologias ativas. Proativa, focada e apaixonada por contribuir para a transformação educacional, sempre buscando inspirar e motivar tanto alunos quanto colegas de trabalho.</a></p> | Primeiro semestre de Análise e Desenvolvimento de Sistemas | Back-End 🔥
-        </div>
-
-        <div class="card">
-          <h3>Sérgio Rios Ribeiro</h3>
-          <p><a href="https://www.linkedin.com/in/sergio-rios-ribeiro/" target="_blank">Estudante de Engenharia de Software </a></p> | POO🔥 | MVVM🔥 | Interesse em Desenvolvimento Mobile 🔥🔥🔥 | Android 🔥 | Kotlin🔥 | Aprendendo desenvolvimento Web 🔥 | HTML 🔥 | CSS 🔥 | JavaScript 🔥🔥
-        </div>
-
-        <div class="card">
-          <h3>Mariana Vitória</h3>
-          <p><a href="https://github.com/MarianaOlvr11" target="_blank">Desenvolvedora Backend entusiasta de tecnologia, inovação e ciência, sempre em busca de soluções eficientes e criativas.</a></p> | 🎓 Cursando Análise e Desenvolvimento de Sistemas no IFSP🔥🔥|
-          🌸 Pronomes: Ela/dela.🔥
-          🎮 Curiosidade: Adoro videogames e esportes.🔥🔥
-        </div>
-
-        <div class="card">
-          <h3>Rafael Vinicius Wierzba</h3>
-          <p><a href="https://github.com/rvwierzba" target="_blank">Rafael Vinicius Wierzba é um Desenvolvedor Fullstack com mais de 4 anos de experiência em desenvolvimento web e aplicações desktop. Ele possui habilidades em C#, PHP, JavaScript, React e metodologias ágeis (Scrum). Formado em Gestão de TI e pós-graduado em Engenharia de Software, Rafael busca contribuir com projetos inovadores, tendo atuado no desenvolvimento de sistemas web e como Instrutor de Desenvolvimento Web.</a></p> | FullStack Developer 🔥 | C# 🔥 | PHP 🔥 |  JAVA 🔥 
-        </div>
-
-        <div class="card">
-          <h3>Samantha Adeline Córdova da Silva✞</h3>
-          <p><a href="https://br.linkedin.com/in/samanthaadeline" target="_blank">Desde cedo, a tecnologia foi minha paixão — e encontrei no ensino o caminho ideal para compartilhá-la com o mundo. Sou formada em Ciência da Computação, com especializações em Marketing Digital e Engenharia de Software, e ao longo da carreira me especializei no ensino de programação e robótica para crianças e adolescentes.</a></p> | Professora de Programação 🔥 | Scratch, Robótica e Ferramentas Digitais 🔥 | Educação com Propósito 🔥
-        </div>
-
-        <div class="card">
-          <h3>Daniele Galvão</h3>
-          <p><a href="https://www.linkedin.com/in/daniele-galv%C3%A3o-10ba00209/" target="_blank">Sou uma profissional da área de tecnologia com sólida experiência em desenvolvimento full stack e um crescente foco em ciência de dados e inteligência artificial. Atualmente, atuo como Coordenadora de equipe de Analise de Sistemas, gerenciando equipe e desenvolvendo e mantendo aplicações web utilizando PHP (Laravel, Lumen, Flight), JavaScript (Vue.js, Quasar), HTML/CSS e AJAX. No backend, crio e consumo APIs RESTful, modelando bases de dados relacionais com MySQL e integrando boas práticas de versionamento com Git e entrega contínua com Docker.</a></p> | Analista e Desenvolvimento de Sistemas 🔥 | Full Stack 🔥 | Software Developer 🔥 | PHP 🔥 | VUE.js 🔥 | Python 🔥 | Django 🔥
-        </div>
-
-        <div class="card">
-          <h3>Isaias Lourenço</h3>
-          <p><a href="https://isaiaslourenco-portfolio.vercel.app/" target="_blank">Formado em Ciência da Computação, já trabalho há uns 30 anos com desenvolvimento,e já trabalhei como programador de alto nível para baixa plataforma, como Cobol, e hoje sou Dev Full Stack. Gosto de Thrash Metal anos 80 e amo leitura do jeito antigo, gosto de inventar novas funcionalidade e sistemas para otimizar funções do dia-a-dia.</a></p> | PHP 🔥 | JavaScript 🔥 | MySQL 🔥 | PostgreSQL 🔥 | Java 🔥 | Muicrosserviços 🔥 | AWS 🔥 |
-        </div>
-
-        <div class="card">
-          <h3>Gabriel Coelho Soares</h3>
-          <p><a href="https://github.com/GabrielCoelho" target="_blank">✨ Busco constantemente desafios que me permitam crescer profissionalmente enquanto contribuo com soluções inovadoras e eficientes. Minha jornada de aprendizado contínuo agora inclui um foco especial em aprofundar meus conhecimentos em Java, através das certificações oferecidas pela Digital Innovation One. Fluente em português e com certificação de inglês nível C1 (válida até novembro de 2025), estou preparado para colaborar em ambientes dinâmicos e multiculturais.</a></p> | Systems Analysis student 🔥 | Rust enthusiast🔥 | ex-fullstack web dev (2017-19)🔥| passionate about backend programming 🔥.
-        </div>
-
-        <div class="card">
-          <h3>João Pedro</h3>
-          <p><a href="https://github.com/joaopedrolour3nc/joaopedrolour3nc" target="_blank">Olá, me chamo João Pedro, tenho 22 anos e sou estudante de Ciências da Computação, com foco em desenvolvimento back-end e DevOps.</a></p> | Html 🔥 | CSS 🔥 | Python 🔥 | JavaScript 🔥 | Java 🔥
-        </div>
-
-        <div class="card">
-          <h3>Oséias Farias</h3>
-          <p><a href="https://oseiasdfarias.github.io/" target="_blank">Mestrando em Engenharia Elétrica pela UFABC (bolsista FUNDEP/UFMG), pesquisando Antifragilidade Artificial aplicada a sistemas de controle, e simultaneamente cursando Mestrado em Computação Aplicada (UFPA), com foco na aplicação de aprendizado por reforço no controle de inversores de frequência. Atuo no desenvolvimento de soluções em Python/Java/MATLAB para arquiteturas antifrágeis. Engenheiro Eletricista (UFPA) e Técnico em Eletrotécnica (IFPA), com experiência profissional nas empresas Eletrobrás/Eletronorte, Dow e Piracanjuba.</a></p> | Python 🔥 | Matlab 🔥 | Ciência de dados 🔥 | mestrando em engenharia elétrica 🔥| mestrando em computação aplicada 🔥.
-        </div>
-
-        <div class="card">
-          <h3>Kamila Carvalho</h3>
-          <p><a href="https://sites.google.com/view/kamilacarvalho/" target="_blank">Olá! Sou Kamila Carvalho, apaixonada por transformar dados em insights estratégicos através de visualizações claras e impactantes. Atuo com Looker Studio, Power BI, SQL, Excel e Pentaho para traduzir informações em histórias que apoiam a tomada de decisão.</a></p> | SQL 🔥 | Power BI 🔥 | Python 🔥 | Looker Studio 🔥 | Tableau 🔥 | Pentaho 🔥 | 
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>  
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-        <div class="card">
-          <h3>Maria Tech</h3>
-          <p><a href="https://mariatech.dev" target="_blank">mariatech.dev</a></p> | "Sou Maria e estou pronta para realizar um bom trabalho. Venha me conhecer!"
-        </div>
-
-
-      </div>
+<div class="container">
+    <section id="secaoHallDaFama" class="sobre-container hall-fama-border" style="display: none;">
+        <h2 class="titulo-hall">🏆 Hall da Fama - Top 3 do Mês</h2>
+        <div id="gridTop3" class="grid">
+            </div>
+    </section>
+    
     </div>
-  </div>
 
-<!-- Projetos Destaques -->
-  <div class="container" id="Projetos">
-    <h2>Projetos em Destaque</h2>
-    <div class="showcase-grid">
-      <div class="showcase-card">
-        <h3>Análise de Vendas.</h3>
-        <p><a href="https://app.powerbi.com/Redirect?action=openreport&context=Annotate&ctid=659ce2b8-0714-4198-8c38-dc9b60aabb57&pbi_source=mobile_android&groupObjectId=2b5cce53-14a3-484f-b0b0-6fd7b9a540f0&reportObjectId=df7f8062-956d-4280-ae75-7292aa28f9d1&reportPage=533fdd78a2b3f4394f00&bookmarkGuid=796e8d1a-3289-44db-a505-61229c770608&fullScreen=0" target="_blank">Relatórios e gráficos para apoiar decisões estratégicas.</a></p> Junior Santos
-        <p>SIMPLIFICA POWER BI EXPRESS.</p>
-      </div>
-      <div class="showcase-card">
-        <h3>Análise de RH</h3>
-        <p><a href="https://app.powerbi.com/Redirect?action=openreport&context=Annotate&ctid=659ce2b8-0714-4198-8c38-dc9b60aabb57&pbi_source=mobile_android&groupObjectId=2b5cce53-14a3-484f-b0b0-6fd7b9a540f0&reportObjectId=f3915933-12fb-46b6-bbb6-84322725318a&reportPage=8352a2eb5a2000135a5a&bookmarkGuid=65ec9d2f-e15c-4444-80bd-d4f525c64b31&fullScreen=0" target="_blank">Avaliação de desempenho com acompanhamento detalhado.</a></p> Junior Santos
-        <p>SIMPLIFICA POWER BI EXPRESS.</p>
-      </div>
-      <div class="showcase-card">
-        <h3>Livre</h3>
-        <p><a href="Livre" target="_blank">Livre.</a></p> Junior Santos
-        <p>Livre.</p>
-      </div>
-      <div class="showcase-card">
-        <h3>Nome Projeto</h3>
-        <p><a href="Livre" target="_blank">Livre.</a></p> Seu nome
-        <p>Livre.</p>
-      </div>
-      <div class="showcase-card">
-        <h3>Nome Projeto</h3>
-        <p><a href="Livre" target="_blank">Livre.</a></p> Seu nome
-        <p>Livre.</p>
-      </div>
+<main class="container">
+    <section id="sobre" class="sobre-container">
+        <div class="sobre-content">
+            <h2>Sobre o Hub</h2>
+            <p>
+                Bem-vindo ao <strong>Hub de Portfólios Profissionais</strong>! Aqui você encontra perfis de profissionais de tecnologia, 
+                empreendedores digitais, negócios locais e talentos criativos. 
+            </p>
+            <p>
+                Nosso objetivo é fortalecer a rede de contatos e proporcionar visibilidade para projetos e habilidades de destaque, 
+                conectando quem faz com quem precisa.
+            </p>
+        </div>
+    </section>
+
+    <section class="search-section">
+        <input type="text" id="searchInput" placeholder="Busca Global: Nome, Tecnologia, Cidade ou Avatar (ex: TechMaster)...">
+    </section>
+
+
+    <div class="filter-controls">
+        <button class="btn-filter active" id="btnSortAlpha" onclick="mudarOrdem('alpha')">🔤 A-Z</button>
+        <button class="btn-filter fire" id="btnSortHot" onclick="mudarOrdem('hot')">🔥 Mais Quentes</button>
     </div>
-  </div>
 
-<!-- Negócios Locais -->
-  <div class="container" id="negocios">
-    <h2>Negócios Locais</h2>
-    <div class="showcase-grid">
-      <div class="showcase-card">
-        <h3>Padaria Pão Doce</h3>
-        <p><a href="https://www.youtube." target="_blank">FFFFFF.</a></p>
-        <p>Pão Doce.</p>
-      </div>
-      <div class="showcase-card">
-        <h3>Academia Fitness+</h3>
-        <p><a href="https://www.youtube." target="_blank">FFFFFF.</a></p>
-        <p>Saúde e bem-estar perto de você.</p>
-      </div>
-    </div>
-  </div>
+    <section id="portfolios">
+        <h2>Empreendedores Digitais & Profissionais</h2>
+        <div class="grid" id="gridPortfolios"></div>
+    </section>
 
-  <!-- Central de YouTubers -->
-  <div class="container" id="youtubers">
-    <h2>Central de YouTubers</h2>
-    <div class="portfolio">
-      <div class="card">
-        <h3>João C Santos</h3>
-        <p><a href="https://www.youtube.com/@joaocsantos6964" target="_blank">Aulas de Estatística e Matemática Financeira para os Cursos Superiores de Tecnologia da Faculdade "Deputado Ary Fossen" - FATEC JD - Centro Paula Souza.</a></p>
-      </div>
-      <div class="card">
-        <h3>Diego Silva</h3>
-        <p><a href="https://www.youtube.com/watch?v=jVxxKYlSDNk" target="_blank">Gameplay, dicas de jogos e entretenimento.</a></p>
-      </div>
-      <div class="card">
-        <h3>Educação Criativa</h3>
-        <p><a href="https://youtube.com/@educacaocriativa" target="_blank">Conteúdo educativo, aulas e tutoriais inovadores.</a></p>
-      </div>
-    </div>
-  </div>
+    <section id="projetos">
+        <h2>Projetos em Destaque</h2>
+        <div class="grid" id="gridProjetos"></div>
+    </section>
 
-  <!-- Apoiadores -->
-  <section class="sponsors" id="patrocinadores">
-    <h2>Apoiadores da Página</h2>
-    <p>Com apenas <strong>R$10/mês</strong>, você garante seu espaço na nossa galeria de apoiadores e fortalece um projeto independente. É uma forma simbólica e significativa de mostrar que você faz parte desta rede e apoia talentos e iniciativas criativas. ✨</p>
-    <div class="sponsor-banners">
-      <img src="icon-102.jpeg" alt="Apoiador 1">
-      <img src="icon-192.png" alt="Apoiador 2">
-      <img src="icon-03.jpeg" alt="Apoiador 3">
-    </div>
-  </section>
+    <section id="negocios">
+        <h2>Negócios Locais</h2>
+        <div class="grid" id="gridNegocios"></div>
+    </section>
 
+    <section id="youtubers">
+        <h2>Canais de YouTubers Tech</h2>
+        <div class="grid" id="gridYoutubers"></div>
+    </section>
 
-<!-- Tabela de Avatares Tech -->
-  <head>
-    <meta charset="UTF-8">
-    <title>🌟 Tabela de Avatares Tech</title>
-    <style>
-      body {
-        background-color: #0d0d0d;
-        color: #f0f0f0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        padding: 20px;
-      }
-  
-      h1 {
-        text-align: center;
-        color: #0ff;
-        text-shadow: 0 0 5px #0ff, 0 0 15px #0ff, 0 0 30px #0ff;
-        animation: glow 2s infinite alternate;
-        font-size: 2.5em;
-      }
-  
-      @keyframes glow {
-        from {
-          text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
-        }
-        to {
-          text-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
-        }
-      }
-  
-      .table-container {
-        overflow-x: auto;
-      }
-  
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: #1a1a1a;
-        border: 2px solid #0ff;
-        box-shadow: 0 0 20px #0ff88c;
-      }
-  
-      th, td {
-        border: 1px solid #333;
-        padding: 12px;
-        text-align: center;
-      }
-  
-      th {
-        background-color: #111;
-        color: #0ff;
-        text-transform: uppercase;
-      }
-  
-      tr:nth-child(even) {
-        background-color: #222;
-      }
-  
-      .legendary {
-        background: linear-gradient(90deg, #ffd700, #fff8dc, #ffd700);
-        color: #000;
-        font-weight: bold;
-        animation: shine 3s infinite alternate;
-      }
-  
-      @keyframes shine {
-        0% {
-          box-shadow: 0 0 10px #ffd700;
-        }
-        100% {
-          box-shadow: 0 0 25px #ffd700, 0 0 40px #fff8dc;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <h1>🌟 Avatares Tech - Galeria de Habilidades 🚀</h1>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Emoji</th>
-            <th>Nome do Avatar</th>
-            <th>⭐ Estrelas</th>
-            <th>Habilidade Principal</th>
-            <th>Nível de Domínio</th>
-            <th>Descrição Curta</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>🧑‍💻</td><td>TechMaster</td><td>⭐⭐⭐⭐</td><td>Gestão de TI + Lógica</td><td>Especialista</td><td>Estratégia e soluções técnicas avançadas.</td></tr>
-          <tr><td>👨‍💻 / 👩‍💻</td><td>CodeNinja</td><td>⭐⭐⭐</td><td>Programação (Python, Kotlin)</td><td>Avançado</td><td>Cria, testa e resolve com fluidez.</td></tr>
-          <tr><td>🛡️</td><td>CyberGuard</td><td>⭐⭐⭐⭐</td><td>Segurança da Informação</td><td>Especialista</td><td>Defesa digital e análise de riscos.</td></tr>
-          <tr><td>📊</td><td>DataSensei</td><td>⭐⭐⭐⭐</td><td>Estatística & BI</td><td>Especialista</td><td>Insights a partir de dados.</td></tr>
-          <tr><td>🧠</td><td>LogicPro</td><td>⭐⭐⭐</td><td>Pensamento lógico</td><td>Avançado</td><td>Solução lógica de alto nível.</td></tr>
-          <tr><td>🛠️</td><td>DevTooler</td><td>⭐⭐</td><td>Ferramentas e IDEs</td><td>Intermediário</td><td>Domina ambientes de desenvolvimento.</td></tr>
-          <tr><td>🛰️</td><td>NetRunner</td><td>⭐⭐⭐</td><td>Redes & Infraestrutura</td><td>Avançado</td><td>Domina conexões e protocolos.</td></tr>
-          <tr><td>🖥️</td><td>SysPilot</td><td>⭐⭐⭐⭐</td><td>Arquitetura de Sistemas</td><td>Especialista</td><td>Projetos robustos e escaláveis.</td></tr>
-          <tr><td>🤖</td><td>AI-Lover</td><td>⭐⭐</td><td>Introdução à IA</td><td>Intermediário</td><td>Explora modelos de machine learning.</td></tr>
-          <tr><td>🧩</td><td>StackBender</td><td>⭐⭐⭐⭐</td><td>Full Stack Development</td><td>Especialista</td><td>Back & Front sem medo!</td></tr>
-          <tr><td>📱</td><td>AppForge</td><td>⭐⭐⭐</td><td>Desenvolvimento Mobile</td><td>Avançado</td><td>Apps ágeis e responsivos.</td></tr>
-          <tr><td>🌐</td><td>WebCrafter</td><td>⭐⭐⭐</td><td>Desenvolvimento Web</td><td>Avançado</td><td>Domina HTML, CSS, JS e frameworks.</td></tr>
-          <tr><td>🧪</td><td>TestWizard</td><td>⭐⭐</td><td>Testes e QA</td><td>Intermediário</td><td>Busca bugs como um detetive digital.</td></tr>
-          <tr><td>⚙️</td><td>AutoTasker</td><td>⭐⭐⭐</td><td>Automação de Processos</td><td>Avançado</td><td>Scripts e bots que poupam tempo.</td></tr>
-          <tr><td>📦</td><td>CloudTrekker</td><td>⭐⭐⭐⭐</td><td>Cloud Computing</td><td>Especialista</td><td>Orquestra serviços em nuvem com maestria.</td></tr>
-          <tr><td>🧾</td><td>DocuMentor</td><td>⭐⭐</td><td>Documentação Técnica</td><td>Intermediário</td><td>Transforma código em conhecimento escrito.</td></tr>
-          <tr><td>📁</td><td>GitMaster</td><td>⭐⭐⭐</td><td>Controle de Versão</td><td>Avançado</td><td>Organiza branches como um maestro.</td></tr>
-          <tr><td>🧮</td><td>MathGenius</td><td>⭐⭐⭐</td><td>Matemática Computacional</td><td>Avançado</td><td>Resolve problemas com precisão cirúrgica.</td></tr>
-          <tr><td>📚</td><td>EduCoder</td><td>⭐⭐⭐</td><td>Ensino de TI</td><td>Avançado</td><td>Transforma conhecimento em aprendizado.</td></tr>
-          <tr class="legendary"><td>👑</td><td>Legendary Emoji</td><td>⭐⭐⭐⭐⭐</td><td>MultiHabilidade Avançada</td><td>Mestre Supremo</td><td>Raro, domina múltiplas áreas tech com excelência.</td></tr>
-        </tbody>
-      </table>
-  </div>
-</div>
+    <section id="patrocinadores">
+        <h2>Apoiadores & Patrocinadores</h2>
+        <div class="grid" id="gridApoiadores"></div>
+    </section>
 
-<!-- Botão flutuante -->
-<a href="#inicio" class="back-to-top" id="topBtn">⬆ Voltar ao Topo</a>
+    <section id="avatares">
+        <h2 class="titulo-tabela">🌟 Avatares Tech - Galeria de Habilidades 🚀</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Emoji</th>
+                        <th>Nome do Avatar</th>
+                        <th>⭐ Estrelas</th>
+                        <th>Habilidade Principal</th>
+                        <th>Nível de Domínio</th>
+                        <th>Descrição Curta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>🧑‍💻</td><td>TechMaster</td><td>⭐⭐⭐⭐</td><td>Gestão de TI + Lógica</td><td>Especialista</td><td>Estratégia e soluções técnicas avançadas.</td></tr>
+                    <tr><td>👨‍💻 / 👩‍💻</td><td>CodeNinja</td><td>⭐⭐⭐</td><td>Programação (Python, Kotlin)</td><td>Avançado</td><td>Cria, testa e resolve com fluidez.</td></tr>
+                    <tr><td>🛡️</td><td>CyberGuard</td><td>⭐⭐⭐⭐</td><td>Segurança da Informação</td><td>Especialista</td><td>Defesa digital e análise de riscos.</td></tr>
+                    <tr><td>📊</td><td>DataSensei</td><td>⭐⭐⭐⭐</td><td>Estatística & BI</td><td>Especialista</td><td>Insights a partir de dados.</td></tr>
+                    <tr><td>🧠</td><td>LogicPro</td><td>⭐⭐⭐</td><td>Pensamento lógico</td><td>Avançado</td><td>Solução lógica de alto nível.</td></tr>
+                    <tr><td>🛠️</td><td>DevTooler</td><td>⭐⭐</td><td>Ferramentas e IDEs</td><td>Intermediário</td><td>Domina ambientes de desenvolvimento.</td></tr>
+                    <tr><td>🛰️</td><td>NetRunner</td><td>⭐⭐⭐</td><td>Redes & Infraestrutura</td><td>Avançado</td><td>Domina conexões e protocolos.</td></tr>
+                    <tr><td>🖥️</td><td>SysPilot</td><td>⭐⭐⭐⭐</td><td>Arquitetura de Sistemas</td><td>Especialista</td><td>Projetos robustos e escaláveis.</td></tr>
+                    <tr><td>🤖</td><td>AI-Lover</td><td>⭐⭐</td><td>Introdução à IA</td><td>Intermediário</td><td>Explora modelos de machine learning.</td></tr>
+                    <tr><td>🧩</td><td>StackBender</td><td>⭐⭐⭐⭐</td><td>Full Stack Development</td><td>Especialista</td><td>Back & Front sem medo!</td></tr>
+                    <tr><td>📱</td><td>AppForge</td><td>⭐⭐⭐</td><td>Desenvolvimento Mobile</td><td>Avançado</td><td>Apps ágeis e responsivos.</td></tr>
+                    <tr><td>🌐</td><td>WebCrafter</td><td>⭐⭐⭐</td><td>Desenvolvimento Web</td><td>Avançado</td><td>Domina HTML, CSS, JS e frameworks.</td></tr>
+                    <tr><td>🧪</td><td>TestWizard</td><td>⭐⭐</td><td>Testes e QA</td><td>Intermediário</td><td>Busca bugs como um detetive digital.</td></tr>
+                    <tr><td>⚙️</td><td>AutoTasker</td><td>⭐⭐⭐</td><td>Automação de Processos</td><td>Avançado</td><td>Scripts e bots que poupam tempo.</td></tr>
+                    <tr><td>📦</td><td>CloudTrekker</td><td>⭐⭐⭐⭐</td><td>Cloud Computing</td><td>Especialista</td><td>Orquestra serviços em nuvem com maestria.</td></tr>
+                    <tr><td>🧾</td><td>DocuMentor</td><td>⭐⭐</td><td>Documentação Técnica</td><td>Intermediário</td><td>Transforma código em conhecimento escrito.</td></tr>
+                    <tr><td>📁</td><td>GitMaster</td><td>⭐⭐⭐</td><td>Controle de Versão</td><td>Avançado</td><td>Organiza branches como um maestro.</td></tr>
+                    <tr><td>🧮</td><td>MathGenius</td><td>⭐⭐⭐</td><td>Matemática Computacional</td><td>Avançado</td><td>Resolve problemas com precisão cirúrgica.</td></tr>
+                    <tr><td>📚</td><td>EduCoder</td><td>⭐⭐⭐</td><td>Ensino de TI</td><td>Avançado</td><td>Transforma conhecimento em aprendizado.</td></tr>
+                    <tr class="legendary"><td>👑</td><td>Legendary Emoji</td><td>⭐⭐⭐⭐⭐</td><td>MultiHabilidade Avançada</td><td>Mestre Supremo</td><td>Raro, domina múltiplas áreas tech.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<!-- Footer -->
-  <!-- Rodapé Final -->
-<footer style="background-color: #000; color: #ccc; text-align: center; padding: 30px 15px; font-size: 0.95em; line-height: 1.6;">
-  <p>&copy; 2025 <strong>Hub de Portfólios Profissionais</strong>. Todos os direitos reservados.</p>
-  <p style="margin-top: 10px;">
-    As imagens, textos e demais conteúdos dos portfólios são de responsabilidade exclusiva de seus respectivos autores.
-    Este site serve apenas como vitrine digital para exposição dos materiais enviados.
-  </p>
-  <p style="margin-top: 10px;">
-    Não nos responsabilizamos por direitos autorais ou uso indevido de qualquer mídia inserida pelos usuários.
-  </p>
-  <p style="margin-top: 15px; font-size: 0.85em; color: #666;">
-    Desenvolvido com 💡 criatividade, 💻 tecnologia e ☕ café.
-  </p>
+    <section id="redes" class="redes-sociais">
+        <h2>Minhas Redes Sociais</h2>
+        <p>Fique à vontade para me seguir:</p>
+        <div class="links-redes">
+            <a href="https://www.linkedin.com/in/junior-santos-9b930b211" target="_blank">LinkedIn</a> |
+            <a href="https://github.com/junior670" target="_blank">GitHub</a> |
+            <a href="https://www.instagram.com/junior.diego.39?igsh=enVua2yNHRicGh5" target="_blank">Instagram</a> |
+            <a href="https://www.dio.me/users/diegojr09" target="_blank">Perfil Público Dio</a> |
+            <a href="https://www.youtube.com/watch?v=jVxxKYlSDNk" target="_blank">YouTube</a>
+        </div>
+    </section>
+</main>
+
+<a href="#inicio" id="topBtn" class="back-to-top" title="Voltar ao Topo">↑ Topo</a>
+
+<footer class="footer-final">
+    <p>&copy; 2025-2026 <strong>Hub de Portfólios Profissionais</strong>. Todos os direitos reservados.</p>
+    <p class="aviso">As imagens e textos são de responsabilidade exclusiva de seus autores.</p>
+    <p style="margin-top: 15px; font-size: 0.85em; color: #666;">
+    Desenvolvido com 💡 criatividade, 💻 tecnologia e ☕ café.</p>
 </footer>
 
-  
+<script src="js/dados.js"></script>
+<script src="js/dados_projetos.js"></script> 
+<script src="js/dados_youtubers.js"></script>
+<script src="js/dados_negocios.js"></script>
+<script src="js/dados_apoiadores.js"></script>
 
-  <script>
-    function searchPortfolios() {
-      const input = document.getElementById('searchInput');
-      const filter = input.value.toLowerCase();
-      const cards = document.querySelectorAll('.portfolio .card');
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-      cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(filter) ? '' : 'none';
-      });
-    }
-  </script>
-    <!-- Outras seções da sua página -->
-
-  <!-- Seção de Redes Sociais -->
-  <section style="background-color:#111; color:#0ff; padding: 30px 20px; text-align: center; border-top: 2px solid #0ff; box-shadow: 0 0 10px #0ff inset;">
-    <h2>Minhas Redes Sociais</h2>
-    <p>Fique à vontade para me seguir:</p>
-    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; font-size: 1.2em;">
-      <a href="https://www.linkedin.com/in/junior-santos-9b930b211" target="_blank" style="color: #0ff; text-decoration: none;">LinkedIn</a> |
-      <a href="https://github.com/junior670" target="_blank" style="color: #0ff; text-decoration: none;">GitHub</a> |
-      <a href="https://www.instagram.com/junior.diego.39?igsh=enVua2yNHRicGh5" target="_blank" style="color: #0ff; text-decoration: none;">Instagram</a> |
-      <a href="https://www.dio.me/users/diegojr09" target="_blank" style="color: #0ff; text-decoration: none;">Perfil Público.Dio</a> |
-      <a href="https://www.dio.me/" target="_blank" style="color: #0ff; text-decoration: none;">Dio.me</a> |
-      <a href="https://www.youtube.com/watch?v=jVxxKYlSDNk" target="_blank" style="color: #0ff; text-decoration: none;">YouTube</a> |
-    </div>
-  </section>
-
-  <!-- Rodapé -->
-  <footer>
-    <p>&copy; 2025 Junior Diego Silva dos Santos. Todos os direitos reservados.</p>
-  </footer>
-
-</body>
-</html>
-
-</body>
-</html>
-
-<script>
-  // Mostrar/Esconder botão topo
-  const topBtn = document.getElementById('topBtn');
-  window.onscroll = function() {
-    topBtn.style.display = (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) ? "block" : "none";
-  };
-
-  // Filtro de portfólio
-  function searchPortfolios() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.portfolio .card').forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(input) ? '' : 'none';
-    });
-  }
-</script>
+<script src="js/script.js"></script>
 
 </body>
 </html>
