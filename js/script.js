@@ -55,8 +55,8 @@ function obterRankings() {
 }
 
 // FUNÇÃO BLINDADA: Compartilhamento que não trava o App da Play Store
-async function compartilharStatus(event, nome, views, rank) {
-    // 1. IMPEDE O APP DE TENTAR NAVEGAR OU RECARREGAR
+function compartilharStatus(event, nome, views, rank) {
+    // 1. Evita comportamentos estranhos no Android
     if (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -69,18 +69,30 @@ async function compartilharStatus(event, nome, views, rank) {
     const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
     const textoCompleto = `${msg}\n\nAcesse: ${url}`;
 
-    try {
-        // Tenta copiar para o teclado
-        await navigator.clipboard.writeText(textoCompleto);
-        alert("✅ STATUS COPIADO!\n\nO ranking já está no seu teclado. Agora é só abrir o WhatsApp e 'Colar'! 🚀");
-    } catch (err) {
-        // Se o Clipboard falhar, o prompt é o método que NUNCA trava
-        window.prompt("Copie o status abaixo para compartilhar:", textoCompleto);
+    // 2. Tenta o Compartilhamento Nativo (Navegador do Celular)
+    if (navigator.share) {
+        navigator.share({
+            title: 'Galeria Tech',
+            text: msg,
+            url: url
+        }).then(() => {
+            console.log('Compartilhado com sucesso');
+        }).catch(() => {
+            // Se der erro ou cancelar, tenta o plano B
+            abrirPromptManual(textoCompleto);
+        });
+    } else {
+        // 3. Plano B: Se não tiver navigator.share (PC ou App travado)
+        abrirPromptManual(textoCompleto);
     }
-    
-    return false; // Garantia extra para o Android não navegar
 }
 
+// Função de apoio que o Android não bloqueia
+function abrirPromptManual(texto) {
+    // O Prompt abre uma caixa com o texto já selecionado para o usuário copiar
+    // É o método mais antigo e infalível da web
+    window.prompt("Copie o status abaixo para compartilhar no WhatsApp/LinkedIn:", texto);
+}
 // ==========================================
 // 3. CONTROLE DE ORDENAÇÃO
 // ==========================================
@@ -138,7 +150,7 @@ function criarCardHTML(item, rank = null) {
                        Ver Mais / Acessar
                     </a>` : ''}
                 
-                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">
+                <button class="btn-share" onclick="compartilharStatus(event, '${item.nome}', ${totalViews}, ${rank || 0})">📢 Compartilhar Status</button>
                     📢 Compartilhar Status
                 </button>
             </div>
@@ -245,6 +257,7 @@ window.onload = () => {
         };
     }
 };
+
 
 
 
