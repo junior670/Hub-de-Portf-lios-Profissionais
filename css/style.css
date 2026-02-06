@@ -523,4 +523,26 @@ th {
     border-color: var(--fire-orange);
     background: var(--fire-orange);
     box-shadow: 0 0 15px var(--fire-orange);
+
+}
+
+/* Mensagem de confirmação (Toast) */
+.toast-sucesso {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 10000;
+    font-weight: bold;
+    animation: subir 0.3s ease-out;
+}
+
+@keyframes subir {
+    from { bottom: -50px; opacity: 0; }
+    to { bottom: 20px; opacity: 1; }
 }
