@@ -54,36 +54,41 @@ function obterRankings() {
         .sort((a, b) => b[1] - a[1]);
 }
 
-// FUNÇÃO BLINDADA: Compartilhamento que não trava o App da Play Store
-function compartilharStatus(event, nome, views, rank) {
-    // 1. Evita comportamentos estranhos no Android
+// Função para mostrar o aviso na tela sem usar alert()
+function mostrarAviso(texto) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-sucesso';
+    toast.innerText = texto;
+    document.body.appendChild(toast);
+
+    // Remove o aviso depois de 3 segundos
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
+async function compartilharStatus(event, nome, views, rank) {
     if (event) {
         event.preventDefault();
         event.stopPropagation();
     }
 
     const msg = (rank && rank > 0) 
-        ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama da Galeria Tech!` 
-        : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} visualizações.`;
+        ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama!` 
+        : `🚀 Confira o projeto "${nome}"! Já tem ${views} visualizações.`;
     
     const url = "https://junior670.github.io/Hub-de-Portf-lios-Profissionais/";
     const textoCompleto = `${msg}\n\nAcesse: ${url}`;
 
-    // 2. Tenta o Compartilhamento Nativo (Navegador do Celular)
-    if (navigator.share) {
-        navigator.share({
-            title: 'Galeria Tech',
-            text: msg,
-            url: url
-        }).then(() => {
-            console.log('Compartilhado com sucesso');
-        }).catch(() => {
-            // Se der erro ou cancelar, tenta o plano B
-            abrirPromptManual(textoCompleto);
-        });
-    } else {
-        // 3. Plano B: Se não tiver navigator.share (PC ou App travado)
-        abrirPromptManual(textoCompleto);
+    // Tenta copiar
+    try {
+        await navigator.clipboard.writeText(textoCompleto);
+        // EM VEZ DE ALERT, USAMOS NOSSO AVISO INTERNO
+        mostrarAviso("✅ Status Copiado! Cole no WhatsApp.");
+    } catch (err) {
+        // Se falhar, o prompt ainda é a última opção
+        window.prompt("Copie o texto:", textoCompleto);
     }
 }
 
@@ -251,6 +256,7 @@ window.onload = () => {
         };
     }
 };
+
 
 
 
