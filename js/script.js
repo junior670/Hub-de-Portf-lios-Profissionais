@@ -2,13 +2,13 @@
 // 0. CONFIGURAÇÃO E CONEXÃO FIREBASE
 // ==========================================
 const firebaseConfig = {
-  apiKey: "AIzaSyD2YnCjJRZ6Of4UbtxuIVKdbvB0MBJfgBc",
-  authDomain: "hubportfoliosp.firebaseapp.com",
-  databaseURL: "https://hubportfoliosp-default-rtdb.firebaseio.com",
-  projectId: "hubportfoliosp",
-  storageBucket: "hubportfoliosp.firebasestorage.app",
-  messagingSenderId: "569514414525",
-  appId: "1:569514414525:web:a2a50953c3cc43446642d4"
+    apiKey: "AIzaSyD2YnCjJRZ6Of4UbtxuIVKdbvB0MBJfgBc",
+    authDomain: "hubportfoliosp.firebaseapp.com",
+    databaseURL: "https://hubportfoliosp-default-rtdb.firebaseio.com",
+    projectId: "hubportfoliosp",
+    storageBucket: "hubportfoliosp.firebasestorage.app",
+    messagingSenderId: "569514414525",
+    appId: "1:569514414525:web:a2a50953c3cc43446642d4"
 };
 
 // Inicializa o Firebase
@@ -28,7 +28,7 @@ function obterStatusXP(views) {
     if (views >= 100) return { label: "💎 LENDÁRIO", class: "legendary", percent: 100 };
     if (views >= 50) {
         let p = ((views - 50) / 50) * 100;
-        return { label: "🔥 ELITE", class: "elite", percent: p };
+        return { label: "🔥 ELITE", class: "elite", percent: Math.min(p, 100) };
     }
     if (views >= 10) {
         let p = ((views - 10) / 40) * 100;
@@ -38,31 +38,31 @@ function obterStatusXP(views) {
     return { label: "🌱 INICIANTE", class: "newbie", percent: p };
 }
 
-// ATUALIZADO: Agora envia para a Nuvem
+// Incrementa visualização na Nuvem
 function registrarVisualizacao(idItem) {
     const ref = database.ref('contagem_portfolios/' + idItem);
-    
-    // Incrementa no Firebase (Global)
     ref.transaction((currentViews) => {
         return (currentViews || 0) + 1;
     });
 }
 
+// Obtém ranking baseado nos dados sincronizados do Firebase
 function obterRankings() {
     const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     return Object.entries(views)
-        .sort((a, b) => b[1] - a[1])
-        .filter(entry => entry[1] > 0);
+        .filter(entry => entry[1] > 0)
+        .sort((a, b) => b[1] - a[1]);
 }
 
+// FUNÇÃO BLINDADA: Compartilhamento que não trava o App da Play Store
 async function compartilharStatus(nome, views, rank) {
-    const msg = rank 
+    const msg = (rank && rank > 0) 
         ? `🏆 O projeto "${nome}" está em ${rank}º lugar no Hall da Fama da Galeria Tech!` 
-        : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} views.`;
+        : `🚀 Confira o projeto "${nome}" na Galeria Tech! Já tem ${views} visualizações.`;
     
     const url = window.location.href;
 
-    // 1. Tenta o compartilhamento nativo (Navegador/App que suporta)
+    // 1. Tenta o compartilhamento nativo do sistema
     if (navigator.share) {
         try {
             await navigator.share({
@@ -70,21 +70,19 @@ async function compartilharStatus(nome, views, rank) {
                 text: msg,
                 url: url
             });
-            return; // Se funcionou, encerra aqui
+            return; 
         } catch (error) {
-            console.log("Erro no compartilhamento nativo, tentando copiar...");
-            // Se o usuário cancelar ou o App bloquear, ele cai no código abaixo
+            console.log("Sistema bloqueou share ou usuário cancelou. Indo para Plano B.");
         }
     }
 
-    // 2. Plano B: Se estiver no App da Play Store ou navegador sem suporte
+    // 2. Plano B: Tenta copiar para o teclado e avisa o usuário
     try {
         await navigator.clipboard.writeText(`${msg} ${url}`);
         alert("Link e status copiados para o seu teclado! 🚀\nAgora é só colar no WhatsApp ou LinkedIn.");
     } catch (err) {
-        // Plano C: Última tentativa caso o clipboard também falhe
         console.error("Falha ao copiar:", err);
-        alert("Ops! Por favor, copie o link da barra de endereços.");
+        alert("Ops! Por favor, copie o link da barra de endereços do seu navegador.");
     }
 }
 
@@ -106,9 +104,9 @@ function mudarOrdem(modo) {
 // ==========================================
 
 function criarCardHTML(item, rank = null) {
-    const views = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
+    const viewsData = JSON.parse(localStorage.getItem('contagem_portfolios')) || {};
     const idItem = item.id || item.nome;
-    const totalViews = views[idItem] || 0;
+    const totalViews = viewsData[idItem] || 0;
     const status = obterStatusXP(totalViews);
     
     const rankingsGerais = obterRankings().slice(0, 10).map(e => e[0]);
@@ -141,9 +139,9 @@ function criarCardHTML(item, rank = null) {
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 ${item.link ? `
                     <a href="${item.link}" target="_blank" class="btn-link" onclick="registrarVisualizacao('${idItem}')">
-                       Ver Mais / Acessar
+                        Ver Mais / Acessar
                     </a>` : ''}
-                <button class="btn-share" onclick="compartilharStatus('${item.nome}', ${totalViews}, ${rank})">📢 Compartilhar</button>
+                <button class="btn-share" onclick="compartilharStatus('${item.nome}', ${totalViews}, ${rank || 0})">📢 Compartilhar Status</button>
             </div>
             
             <div class="tags" style="margin-top: 10px; font-size: 0.75em; color: var(--neon-blue);">${item.tags || ''}</div>
@@ -200,8 +198,20 @@ function realizarBusca() {
         const rankings = obterRankings().slice(0, 3);
         if (termo === "" && rankings.length > 0) {
             secaoHall.style.display = "block";
-            const todasAsListas = [...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []), ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []), ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []), ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []), ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])];
-            const itensTop3 = rankings.map(rankItem => todasAsListas.find(p => (p.id || p.nome) == rankItem[0])).filter(i => i);
+            
+            // Reúne todas as listas para encontrar o objeto completo do Top 3
+            const todasAsListas = [
+                ...(typeof listaPortfolios !== 'undefined' ? listaPortfolios : []),
+                ...(typeof listaProjetos !== 'undefined' ? listaProjetos : []),
+                ...(typeof listaYoutubers !== 'undefined' ? listaYoutubers : []),
+                ...(typeof listaNegocios !== 'undefined' ? listaNegocios : []),
+                ...(typeof listaApoiadores !== 'undefined' ? listaApoiadores : [])
+            ];
+
+            const itensTop3 = rankings.map(rankItem => {
+                return todasAsListas.find(p => (p.id || p.nome) == rankItem[0]);
+            }).filter(i => i);
+
             gridTop3.innerHTML = itensTop3.map((item, index) => criarCardHTML(item, index + 1)).join('');
         } else {
             secaoHall.style.display = "none";
@@ -214,21 +224,16 @@ function realizarBusca() {
 // ==========================================
 
 window.onload = () => {
-    // 1. Escuta o Firebase em Tempo Real (A MÁGICA ACONTECE AQUI)
+    // Sincronização em Tempo Real com Firebase
     database.ref('contagem_portfolios').on('value', (snapshot) => {
         const dadosNuvem = snapshot.val() || {};
-        // Sincroniza a nuvem com o localStorage para manter o sistema atual funcionando
         localStorage.setItem('contagem_portfolios', JSON.stringify(dadosNuvem));
-        
-        // Atualiza a interface automaticamente
-        realizarBusca();
+        realizarBusca(); // Re-renderiza tudo com os números novos
     });
 
-    // 2. Lógica de Busca
     const inputBusca = document.getElementById('searchInput');
     if (inputBusca) inputBusca.addEventListener('input', realizarBusca);
 
-    // 3. Botão Voltar ao Topo
     const btnTopo = document.getElementById('topBtn');
     window.addEventListener('scroll', () => {
         if (btnTopo) btnTopo.style.display = window.scrollY > 300 ? "block" : "none";
@@ -240,5 +245,4 @@ window.onload = () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
     }
-
 };
